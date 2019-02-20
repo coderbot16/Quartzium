@@ -21,7 +21,7 @@ mkdir -p $OUT_LANG
 # [Texture Generation]
 
 colors=(red green blue light dark)
-flavors=(ore bricks storage plate platform shield)
+flavors=(ore bricks block plate platform shield)
 
 for color in ${colors[*]}
 do

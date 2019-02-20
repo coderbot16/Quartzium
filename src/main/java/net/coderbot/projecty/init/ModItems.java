@@ -17,7 +17,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class ModItems {
 	public static FlavorItem ORE;
 	public static FlavorItem BRICKS;
-	public static FlavorItem STORAGE;
+	public static FlavorItem BLOCK;
 	public static FlavorItem PLATE;
 	public static FlavorItem PLATFORM;
 	public static FlavorItem SHIELD;
@@ -26,7 +26,7 @@ public class ModItems {
 	public static void registerItems(RegistryEvent.Register<Item> event) {
 		ORE = registerFlavor(event, ModBlocks.ORE);
 		BRICKS = registerFlavor(event, ModBlocks.BRICKS);
-		STORAGE = registerFlavor(event, ModBlocks.STORAGE);
+		BLOCK = registerFlavor(event, ModBlocks.BLOCK);
 		PLATE = registerFlavor(event, ModBlocks.PLATE);
 		PLATFORM = registerFlavor(event, ModBlocks.PLATFORM);
 		SHIELD = registerFlavor(event, ModBlocks.SHIELD);
@@ -40,7 +40,7 @@ public class ModItems {
 
 		registerFlavorModels(ORE);
 		registerFlavorModels(BRICKS);
-		registerFlavorModels(STORAGE);
+		registerFlavorModels(BLOCK);
 		registerFlavorModels(PLATE);
 		registerFlavorModels(PLATFORM);
 		registerFlavorModels(SHIELD);

@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class ModBlocks {
 	public static Flavor ORE;
 	public static Flavor BRICKS;
-	public static Flavor STORAGE;
+	public static Flavor BLOCK;
 	public static Flavor PLATE;
 	public static Flavor PLATFORM;
 	public static Flavor SHIELD;
@@ -20,7 +20,7 @@ public class ModBlocks {
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
 		ORE = registerFlavor(event, ProjectY.BASE_NAME + "_ore");
 		BRICKS = registerFlavor(event, ProjectY.BASE_NAME + "_bricks");
-		STORAGE = registerFlavor(event, ProjectY.BASE_NAME + "_storage");
+		BLOCK = registerFlavor(event, ProjectY.BASE_NAME + "_block");
 		PLATE = registerFlavor(event, ProjectY.BASE_NAME + "_plate");
 		PLATFORM = registerFlavor(event, ProjectY.BASE_NAME + "_platform");
 		SHIELD = registerFlavor(event, ProjectY.BASE_NAME + "_shield");
