@@ -1,6 +1,8 @@
 package net.coderbot.projecty.init;
 
 import net.coderbot.projecty.ProjectY;
+import net.coderbot.projecty.color.ColorMap;
+import net.coderbot.projecty.color.PentaColorMap;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -15,21 +17,21 @@ import net.minecraftforge.fml.relauncher.Side;
 
 @Mod.EventBusSubscriber(modid = ProjectY.MODID)
 public class ModItems {
-	public static FlavorItem ORE;
-	public static FlavorItem BRICKS;
-	public static FlavorItem BLOCK;
-	public static FlavorItem PLATE;
-	public static FlavorItem PLATFORM;
-	public static FlavorItem SHIELD;
+	public static PentaColorMap<Item> ORE;
+	public static ColorMap<Item> BRICKS;
+	public static ColorMap<Item> BLOCK;
+	public static ColorMap<Item> PLATE;
+	public static ColorMap<Item> PLATFORM;
+	public static ColorMap<Item> SHIELD;
 
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
-		ORE = registerFlavor(event, ModBlocks.ORE);
-		BRICKS = registerFlavor(event, ModBlocks.BRICKS);
-		BLOCK = registerFlavor(event, ModBlocks.BLOCK);
-		PLATE = registerFlavor(event, ModBlocks.PLATE);
-		PLATFORM = registerFlavor(event, ModBlocks.PLATFORM);
-		SHIELD = registerFlavor(event, ModBlocks.SHIELD);
+		ORE = ModBlocks.ORE.map(block -> register(event, block));
+		BRICKS = ModBlocks.BRICKS.map(block -> register(event, block));
+		BLOCK = ModBlocks.BLOCK.map(block -> register(event, block));
+		PLATE = ModBlocks.PLATE.map(block -> register(event, block));
+		PLATFORM = ModBlocks.PLATFORM.map(block -> register(event, block));
+		SHIELD = ModBlocks.SHIELD.map(block -> register(event, block));
 	}
 
 	@SubscribeEvent
@@ -38,32 +40,12 @@ public class ModItems {
 			return;
 		}
 
-		registerFlavorModels(ORE);
-		registerFlavorModels(BRICKS);
-		registerFlavorModels(BLOCK);
-		registerFlavorModels(PLATE);
-		registerFlavorModels(PLATFORM);
-		registerFlavorModels(SHIELD);
-	}
-
-	private static FlavorItem registerFlavor(RegistryEvent.Register<Item> event, ModBlocks.Flavor base) {
-		FlavorItem flavor = new FlavorItem();
-
-		flavor.red = register(event, base.red);
-		flavor.blue = register(event, base.blue);
-		flavor.green = register(event, base.green);
-		flavor.light = register(event, base.light);
-		flavor.dark = register(event, base.dark);
-
-		return flavor;
-	}
-
-	private static void registerFlavorModels(FlavorItem flavor) {
-		registerModel(flavor.red);
-		registerModel(flavor.blue);
-		registerModel(flavor.green);
-		registerModel(flavor.light);
-		registerModel(flavor.dark);
+		ORE.forEach((color, item) -> registerModel(item));
+		BRICKS.forEach((color, item) -> registerModel(item));
+		BLOCK.forEach((color, item) -> registerModel(item));
+		PLATE.forEach((color, item) -> registerModel(item));
+		PLATFORM.forEach((color, item) -> registerModel(item));
+		SHIELD.forEach((color, item) -> registerModel(item));
 	}
 
 	private static Item register(RegistryEvent.Register<Item> event, Block base) {
@@ -77,13 +59,5 @@ public class ModItems {
 
 	private static void registerModel(Item item) {
 		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
-	}
-
-	public static class FlavorItem {
-		public Item red;
-		public Item blue;
-		public Item green;
-		public Item light;
-		public Item dark;
 	}
 }
