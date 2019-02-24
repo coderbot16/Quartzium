@@ -152,19 +152,27 @@ EOF
 			"model": "${__model_ref}"
 		},
 		"facing=down": {
-			"model": "${__model_ref}"
+			"model": "${__model_ref}",
+			"x": 180
 		},
 		"facing=east": {
-			"model": "${__model_ref}"
+			"model": "${__model_ref}",
+			"x": 90,
+			"y": 90
 		},
 		"facing=west": {
-			"model": "${__model_ref}"
+			"model": "${__model_ref}",
+			"x": 90,
+			"y": 270
 		},
 		"facing=south": {
-			"model": "${__model_ref}"
+			"model": "${__model_ref}",
+			"x": 90,
+			"y": 180
 		},
 		"facing=north": {
-			"model": "${__model_ref}"
+			"model": "${__model_ref}",
+			"x": 90
 		},
 		"inventory": {
 			"model": "${__model_ref}",
