@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	"CGC",
+	"GIG",
+	"CGC"
+  ],
+  "key": {
+	"C": {
+	  "item": "projecty:@COLOR@_@BASE@_crystal"
+	},
+	"G": {
+	  "item": "minecraft:glass"
+	},
+	"I": {
+	  "item": "minecraft:iron_nugget"
+	}
+  },
+  "result": {
+	"count": 1,
+	"item": "projecty:@COLOR@_@BASE@_platform"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	"CIC",
+	"IOI",
+	"CIC"
+  ],
+  "key": {
+	"C": {
+	  "item": "projecty:@COLOR@_@BASE@_crystal"
+	},
+	"O": {
+	  "item": "minecraft:obsidian"
+	},
+	"I": {
+	  "item": "minecraft:iron_ingot"
+	}
+  },
+  "result": {
+	"count": 1,
+	"item": "projecty:@COLOR@_@BASE@_shield"
+  }
+}

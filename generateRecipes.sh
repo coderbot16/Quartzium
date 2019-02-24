@@ -29,11 +29,12 @@ declare -ra __COLORS_NAME=(
 declare -ri __COLORS_COUNT="${#__COLORS_NAME[@]}"
 
 declare -ra __FLAVORS=(
-#  'bricks'
+  'bricks'
   'block'
-#  'plate'
-#  'platform'
-#  'shield'
+  'crystal'
+  'plate'
+  'platform'
+  'shield'
 )
 
 declare -a __COLORS_CONV=(

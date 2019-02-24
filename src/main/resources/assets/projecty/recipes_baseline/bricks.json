@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	" B ",
+	"BSB",
+	" B "
+  ],
+  "key": {
+	"B": {
+	  "item": "projecty:@COLOR@_@BASE@_block"
+	},
+	"S": {
+	  "item": "minecraft:stonebrick",
+	  "data": 0
+	}
+  },
+  "result": {
+	"count": 4,
+	"item": "projecty:@COLOR@_@BASE@_bricks"
+  }
+}
