@@ -65,12 +65,21 @@ dependencies {
 task generateResources(type: Exec) {
     // process generated resources
     workingDir "$projectDir"
+    
     commandLine './generateResources.sh'
+}
+
+task generateRecipes(type: Exec) {
+    // process generated resources
+    workingDir "$projectDir"
+
+    commandLine './generateRecipes.sh'
 }
 
 processResources {
 
     dependsOn 'generateResources'
+    dependsOn 'generateRecipes'
 
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
@@ -87,9 +96,7 @@ processResources {
     // copy everything else except the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
-        exclude 'assets/projecty/textures/baseline'
-        exclude 'assets/projecty/models/baseline'
-        exclude 'assets/projecty/recipes/baseline'
+        // TODO: Exclude baseline stuff
     }
 }
 

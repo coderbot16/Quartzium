@@ -5,6 +5,8 @@ import net.coderbot.projecty.init.ModItems;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @Mod(modid = ProjectY.MODID, name = ProjectY.NAME, version = ProjectY.VERSION)
 public class ProjectY
@@ -21,4 +23,11 @@ public class ProjectY
             return new ItemStack(ModItems.BRICKS.get(Color.BLUE));
         }
     };
+
+    @Mod.EventHandler
+    public static void init(FMLInitializationEvent event) {
+        ModItems.ORE.forEach((color, ore) ->
+                GameRegistry.addSmelting(ore, new ItemStack(ModItems.CRYSTAL.get(color), 3), 1)
+        );
+    }
 }

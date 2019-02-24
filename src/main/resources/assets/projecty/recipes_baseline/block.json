@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	"CCC",
+	"CCC",
+	"CCC"
+  ],
+  "key": {
+	"C": {
+	  "item": "projecty:@COLOR@_@BASE@_crystal"
+	}
+  },
+  "result": {
+	"count": 1,
+	"item": "projecty:@COLOR@_@BASE@_block"
+  }
+}
