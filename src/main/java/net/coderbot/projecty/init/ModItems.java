@@ -48,7 +48,7 @@ public class ModItems {
 		OBJLoader.INSTANCE.addDomain(ProjectY.MODID);
 
 		ORE.forEach((color, item) -> registerModel(item));
-		CRYSTAL.forEach((color, item) -> registerModelObj(item));
+		CRYSTAL.forEach((color, item) -> registerModel(item));
 		BRICKS.forEach((color, item) -> registerModel(item));
 		BLOCK.forEach((color, item) -> registerModel(item));
 		PLATE.forEach((color, item) -> registerModel(item));
@@ -67,9 +67,5 @@ public class ModItems {
 
 	private static void registerModel(Item item) {
 		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
-	}
-
-	private static void registerModelObj(Item item) {
-		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName()+".obj", "inventory"));
 	}
 }

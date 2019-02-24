@@ -146,6 +146,7 @@ EOF
       declare __model_ref="${__MODID}:${__NAME}.obj"
       cat >"${__blockstate_file}" <<EOF
 {
+	"forge_marker": 1,
 	"variants": {
 		"facing=up": {
 			"model": "${__model_ref}"
@@ -164,6 +165,46 @@ EOF
 		},
 		"facing=north": {
 			"model": "${__model_ref}"
+		},
+		"inventory": {
+			"model": "${__model_ref}",
+			"transform": {
+				"gui": {
+					"translation": [0, 0.297483, 0],
+					"rotation": [30, 225, 0],
+					"scale": [1, 1, 1]
+				},
+				"ground": {
+					"translation": [0, 0.297483, 0],
+					"rotation": [0, 0, 0],
+					"scale": [0.5, 0.5, 0.5]
+				},
+				"fixed": {
+					"translation": [0, 0.297483, 0],
+					"rotation": [0, 0, 0],
+					"scale": [1, 1, 1]
+				},
+				"thirdperson_righthand": {
+					"translation": [0, 0.15, 0],
+					"rotation": [0, 45, 0],
+					"scale": [0.625, 0.625, 0.625]
+				},
+				"thirdperson_lefthand":	{
+					"translation": [0, 0.15, 0],
+					"rotation": [0, 225, 0],
+					"scale": [0.625, 0.625, 0.625]
+				},
+				"firstperson_righthand": {
+					"translation": [0, 0.15, 0],
+					"rotation": [0, 45, 0],
+					"scale": [0.6, 0.6, 0.6]
+				},
+				"firstperson_lefthand": {
+					"translation": [0, 0.15, 0],
+					"rotation": [0, 225, 0],
+					"scale": [0.6, 0.6, 0.6]
+				}
+			}
 		}
 	}
 }
@@ -201,11 +242,14 @@ EOF
       sed "s/mtllib icosahedron\.mtl/mtllib ${__NAME}\.mtl/" < "${__IN_MODELS}/icosahedron.obj" > ${__block_model_file}
       sed "s/noise\.png/${__texture_ref}/" < "${__IN_MODELS}/icosahedron.mtl" > ${__block_material_file}
 
-      declare __item_model_file="${__OUT_MODELS_ITEM}/${__NAME}.obj"
-      declare __item_material_file="${__OUT_MODELS_ITEM}/${__NAME}.mtl"
+      declare __item_model_file="${__OUT_MODELS_ITEM}/${__NAME}.json"
       mkdir -p "$(dirname "${__item_model_file}")"
-      sed "s/mtllib icosahedron\.mtl/mtllib ${__NAME}\.mtl/" < "${__IN_MODELS}/icosahedron_inventory.obj" > ${__item_model_file}
-      cp ${__block_material_file} ${__item_material_file}
+
+      cat >"${__item_model_file}" <<EOF
+{
+  "forge_marker": 1
+}
+EOF
     fi
 
     # [Language Generation]
