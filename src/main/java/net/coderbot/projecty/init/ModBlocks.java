@@ -1,6 +1,7 @@
 package net.coderbot.projecty.init;
 
 import net.coderbot.projecty.ProjectY;
+import net.coderbot.projecty.blocks.BlockCrystal;
 import net.coderbot.projecty.color.Color;
 import net.coderbot.projecty.color.ColorMap;
 import net.coderbot.projecty.blocks.BlockDecoration;
@@ -17,6 +18,7 @@ import java.util.function.Function;
 @Mod.EventBusSubscriber(modid = ProjectY.MODID)
 public class ModBlocks {
 	public static PentaColorMap<Block> ORE;
+	public static ColorMap<Block> CRYSTAL;
 	public static ColorMap<Block> BRICKS;
 	public static ColorMap<Block> BLOCK;
 	public static ColorMap<Block> PLATE;
@@ -27,6 +29,10 @@ public class ModBlocks {
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
 		ORE = registerForPentaColors(event, ProjectY.BASE_NAME + "_ore", color ->
 				new BlockOre(color.getColor())
+		);
+
+		CRYSTAL = registerForColors(event, ProjectY.BASE_NAME + "_crystal", color ->
+				new BlockCrystal(color.getColor())
 		);
 
 		BRICKS = registerForColors(event, ProjectY.BASE_NAME + "_bricks", color ->

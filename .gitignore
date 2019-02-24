@@ -23,5 +23,6 @@ run
 
 # generated resources
 src/main/resources/assets/projecty/blockstates
-src/main/resources/assets/projecty/models
+src/main/resources/assets/projecty/models/block
+src/main/resources/assets/projecty/models/item
 src/main/resources/assets/projecty/textures/blocks

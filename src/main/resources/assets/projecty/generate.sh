@@ -1,10 +1,11 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 # Purpose: Combine the overlays and colored noise into flattened images
 
 # [Initialization]
 declare __IN_TEXTURES='./textures/baseline'
 declare __OUT_TEXTURES='./textures/blocks'
 declare __OUT_BLOCKSTATES='./blockstates'
+declare __IN_MODELS='./models/baseline'
 declare __OUT_MODELS_BLOCK='./models/block'
 declare __OUT_MODELS_ITEM='./models/item'
 declare __OUT_LANG='./lang'
@@ -13,14 +14,27 @@ declare __BASE_NAME='xychronite'
 
 # Color Variable Setup
 
-declare -a __FLAVORS=(
+declare -a __FLAVORS_NAME=(
   'ore'
   'bricks'
   'block'
   'plate'
   'platform'
   'shield'
+  'crystal'
 )
+
+declare -a __FLAVORS_CRYSTAL=(
+  'false'
+  'false'
+  'false'
+  'false'
+  'false'
+  'false'
+  'true'
+)
+
+declare -i __FLAVORS_COUNT="${#__FLAVORS_NAME[@]}"
 
 declare -a __COLORS_NAME=(
   'white'
@@ -89,10 +103,12 @@ echo >"${__LANG_FILE}" "itemGroup.projecty=ProjectY"
 declare -i __color_id
 declare __flavor
 for ((__color_id = 0; __color_id < __COLORS_COUNT; __color_id += 1)); do
-  for __flavor in "${__FLAVORS[@]}"; do
+  for ((__flavor_id = 0; __flavor_id < __FLAVORS_COUNT; __flavor_id += 1)); do
+    declare __flavor="${__FLAVORS_NAME[${__flavor_id}]}"
     declare __color="${__COLORS_NAME[${__color_id}]}"
     declare __rgb="${__COLORS_RGB[${__color_id}]}"
     declare __gamma="${__COLORS_GAMMA[${__color_id}]}"
+    declare __crystal="${__FLAVORS_CRYSTAL[${__flavor_id}]}"
 
     # [Texture Generation]
     # NB: Minecraft doesn't handle grayscale well, make sure the images are in RGB.
@@ -114,8 +130,10 @@ for ((__color_id = 0; __color_id < __COLORS_COUNT; __color_id += 1)); do
     # [Block State Generation]
     declare __blockstate_file="${__OUT_BLOCKSTATES}/${__NAME}.json"
     mkdir -p "$(dirname "${__blockstate_file}")"
-    declare __model_ref="${__MODID}:${__NAME}"
-    cat >"${__blockstate_file}" <<EOF
+    if [[ "${__crystal}" != "true" ]]
+    then
+      declare __model_ref="${__MODID}:${__NAME}"
+      cat >"${__blockstate_file}" <<EOF
 {
   "variants": {
     "normal": {
@@ -124,12 +142,41 @@ for ((__color_id = 0; __color_id < __COLORS_COUNT; __color_id += 1)); do
   }
 }
 EOF
+    else
+      declare __model_ref="${__MODID}:${__NAME}.obj"
+      cat >"${__blockstate_file}" <<EOF
+{
+	"variants": {
+		"facing=up": {
+			"model": "${__model_ref}"
+		},
+		"facing=down": {
+			"model": "${__model_ref}"
+		},
+		"facing=east": {
+			"model": "${__model_ref}"
+		},
+		"facing=west": {
+			"model": "${__model_ref}"
+		},
+		"facing=south": {
+			"model": "${__model_ref}"
+		},
+		"facing=north": {
+			"model": "${__model_ref}"
+		}
+	}
+}
+EOF
+    fi
 
     # [Model Generation]
-    declare __block_model_file="${__OUT_MODELS_BLOCK}/${__NAME}.json"
-    mkdir -p "$(dirname "${__block_model_file}")"
-    declare __texture_ref="${__MODID}:blocks/${__flavor}_${__color}"
-    cat >"${__block_model_file}" <<EOF
+    if [[ "${__crystal}" != "true" ]]
+    then
+      declare __block_model_file="${__OUT_MODELS_BLOCK}/${__NAME}.json"
+      mkdir -p "$(dirname "${__block_model_file}")"
+      declare __texture_ref="${__MODID}:blocks/${__flavor}_${__color}"
+      cat >"${__block_model_file}" <<EOF
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
@@ -138,26 +185,35 @@ EOF
 }
 EOF
 
-    declare __item_model_file="${__OUT_MODELS_ITEM}/${__NAME}.json"
-    mkdir -p "$(dirname "${__item_model_file}")"
-    declare __parent_ref="${__MODID}:block/${__NAME}"
-    cat >"${__item_model_file}" <<EOF
+      declare __item_model_file="${__OUT_MODELS_ITEM}/${__NAME}.json"
+      mkdir -p "$(dirname "${__item_model_file}")"
+      declare __parent_ref="${__MODID}:block/${__NAME}"
+      cat >"${__item_model_file}" <<EOF
 {
   "parent": "${__parent_ref}"
 }
 EOF
+    else
+      declare __block_model_file="${__OUT_MODELS_BLOCK}/${__NAME}.obj"
+      declare __block_material_file="${__OUT_MODELS_BLOCK}/${__NAME}.mtl"
+      declare __texture_ref="${__MODID}\:blocks\/${__flavor}_${__color}"
+      mkdir -p "$(dirname "${__block_model_file}")"
+      sed "s/mtllib icosahedron\.mtl/mtllib ${__NAME}\.mtl/" < "${__IN_MODELS}/icosahedron.obj" > ${__block_model_file}
+      sed "s/noise\.png/${__texture_ref}/" < "${__IN_MODELS}/icosahedron.mtl" > ${__block_material_file}
+
+      declare __item_model_file="${__OUT_MODELS_ITEM}/${__NAME}.obj"
+      declare __item_material_file="${__OUT_MODELS_ITEM}/${__NAME}.mtl"
+      mkdir -p "$(dirname "${__item_model_file}")"
+      sed "s/mtllib icosahedron\.mtl/mtllib ${__NAME}\.mtl/" < "${__IN_MODELS}/icosahedron_inventory.obj" > ${__item_model_file}
+      cp ${__block_material_file} ${__item_material_file}
+    fi
 
     # [Language Generation]
-    declare lang_key="${__MODID}.${__NAME}.name"
-    declare lang_value
-    lang_value="$(
-      # Upper-case first letter of __color
-      echo -n "${__color:0:1}" | tr '[:lower:]' '[:upper:]'
-      # Keep remaining of __color unchanged
-      echo -n "${__color:1}"
-    ) ${__BASE_NAME} ${__flavor}"
+    declare lang_key="tile.${__MODID}.${__NAME}.name"
+    declare lang_value_raw="$(echo -n ${__color} | sed "s/_/ /") ${__BASE_NAME} ${__flavor}"
+    declare lang_value=$(echo -n $lang_value_raw | tr [A-Z] [a-z] | sed -e 's/^./\U&/g; s/ ./\U&/g')
     echo >>"${__LANG_FILE}" "${lang_key}=${lang_value}"
   done
 done
 
-# TODO: Recipes, items, etc
+# TODO: Recipes

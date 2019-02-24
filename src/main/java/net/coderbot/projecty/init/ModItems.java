@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -18,6 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @Mod.EventBusSubscriber(modid = ProjectY.MODID)
 public class ModItems {
 	public static PentaColorMap<Item> ORE;
+	public static ColorMap<Item> CRYSTAL;
 	public static ColorMap<Item> BRICKS;
 	public static ColorMap<Item> BLOCK;
 	public static ColorMap<Item> PLATE;
@@ -27,6 +29,7 @@ public class ModItems {
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
 		ORE = ModBlocks.ORE.map(block -> register(event, block));
+		CRYSTAL = ModBlocks.CRYSTAL.map(block -> register(event, block));
 		BRICKS = ModBlocks.BRICKS.map(block -> register(event, block));
 		BLOCK = ModBlocks.BLOCK.map(block -> register(event, block));
 		PLATE = ModBlocks.PLATE.map(block -> register(event, block));
@@ -40,7 +43,10 @@ public class ModItems {
 			return;
 		}
 
+		OBJLoader.INSTANCE.addDomain(ProjectY.MODID);
+
 		ORE.forEach((color, item) -> registerModel(item));
+		CRYSTAL.forEach((color, item) -> registerModelObj(item));
 		BRICKS.forEach((color, item) -> registerModel(item));
 		BLOCK.forEach((color, item) -> registerModel(item));
 		PLATE.forEach((color, item) -> registerModel(item));
@@ -59,5 +65,9 @@ public class ModItems {
 
 	private static void registerModel(Item item) {
 		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+	}
+
+	private static void registerModelObj(Item item) {
+		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName()+".obj", "inventory"));
 	}
 }
