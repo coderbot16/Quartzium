@@ -1,110 +1,162 @@
-#!/bin/bash
+#!/bin/env bash
 # Purpose: Combine the overlays and colored noise into flattened images
 
 # [Initialization]
-IN_TEXTURES=./textures/baseline
-OUT_TEXTURES=./textures/blocks
-OUT_BLOCKSTATES=./blockstates
-OUT_MODELS_BLOCK=./models/block
-OUT_MODELS_ITEM=./models/item
-OUT_LANG=./lang
-MODID="projecty"
-BASE_NAME="xychronite"
-
-mkdir -p $OUT_TEXTURES
-mkdir -p $OUT_BLOCKSTATES
-mkdir -p $OUT_MODELS_BLOCK
-mkdir -p $OUT_MODELS_ITEM
-mkdir -p $OUT_LANG
+declare __IN_TEXTURES='./textures/baseline'
+declare __OUT_TEXTURES='./textures/blocks'
+declare __OUT_BLOCKSTATES='./blockstates'
+declare __OUT_MODELS_BLOCK='./models/block'
+declare __OUT_MODELS_ITEM='./models/item'
+declare __OUT_LANG='./lang'
+declare __MODID='projecty'
+declare __BASE_NAME='xychronite'
 
 # Color Variable Setup
 
-flavors=(ore bricks block plate platform shield)
+declare -a __FLAVORS=(
+  'ore'
+  'bricks'
+  'block'
+  'plate'
+  'platform'
+  'shield'
+)
 
-declare -A colors
-colors["white"]="rgb(255,255,255)"
-colors["orange"]="rgb(100,50,0)"
-colors["magenta"]="rgb(100,0,100)"
-colors["light_blue"]="rgb(0,0,100)"
-colors["yellow"]="rgb(100,100,0)"
-colors["lime"]="rgb(0,100,0)"
-colors["pink"]="rgb(100,0,0)"
-colors["gray"]="rgb(0,0,0)"
-colors["light_gray"]="rgb(0,0,0)"
-colors["cyan"]="rgb(50,100,100)"
-colors["purple"]="rgb(100,0,100)"
-colors["blue"]="rgb(0,0,100)"
-colors["brown"]="rgb(150,75,0)"
-colors["green"]="rgb(0,100,0)"
-colors["red"]="rgb(100,0,0)"
-colors["black"]="rgb(0,0,0)"
+declare -a __COLORS_NAME=(
+  'white'
+  'orange'
+  'magenta'
+  'light_blue'
+  'yellow'
+  'lime'
+  'pink'
+  'gray'
+  'light_gray'
+  'cyan'
+  'purple'
+  'blue'
+  'brown'
+  'green'
+  'red'
+  'black'
+)
 
-declare -A gamma
-gamma["white"]="1.0"
-gamma["orange"]="1.0"
-gamma["magenta"]="1.2"
-gamma["light_blue"]="1.2"
-gamma["yellow"]="0.7"
-gamma["lime"]="1.2"
-gamma["pink"]="1.2"
-gamma["gray"]="0.4"
-gamma["light_gray"]="0.7"
-gamma["cyan"]="1.2"
-gamma["purple"]="0.7"
-gamma["blue"]="0.7"
-gamma["brown"]="0.7"
-gamma["green"]="0.7"
-gamma["red"]="0.7"
-gamma["black"]="0.2"
+declare -i __COLORS_COUNT="${#__COLORS_NAME[@]}"
 
-# [Texture Generation]
+declare -a __COLORS_RGB=(
+  'rgb(255,255,255)'
+  'rgb(100,50,0)'
+  'rgb(100,0,100)'
+  'rgb(0,0,100)'
+  'rgb(100,100,0)'
+  'rgb(0,100,0)'
+  'rgb(100,0,0)'
+  'rgb(0,0,0)'
+  'rgb(0,0,0)'
+  'rgb(50,100,100)'
+  'rgb(100,0,100)'
+  'rgb(0,0,100)'
+  'rgb(150,75,0)'
+  'rgb(0,100,0)'
+  'rgb(100,0,0)'
+  'rgb(0,0,0)'
+)
 
-for color in ${!colors[@]}
-do
-  for flavor in ${flavors[*]}
-  do
+declare -a __COLORS_GAMMA=(
+  '1.0'
+  '1.0'
+  '1.2'
+  '1.2'
+  '0.7'
+  '1.2'
+  '1.2'
+  '0.4'
+  '0.7'
+  '1.2'
+  '0.7'
+  '0.7'
+  '0.7'
+  '0.7'
+  '0.7'
+  '0.2'
+)
+
+# Initialize language file
+declare __LANG_FILE="${__OUT_LANG}/en_us.lang"
+mkdir -p "$(dirname "${__LANG_FILE}")"
+echo >"${__LANG_FILE}" "itemGroup.projecty=ProjectY"
+
+declare -i __color_id
+declare __flavor
+for ((__color_id = 0; __color_id < __COLORS_COUNT; __color_id += 1)); do
+  for __flavor in "${__FLAVORS[@]}"; do
+    declare __color="${__COLORS_NAME[${__color_id}]}"
+    declare __rgb="${__COLORS_RGB[${__color_id}]}"
+    declare __gamma="${__COLORS_GAMMA[${__color_id}]}"
+
+    # [Texture Generation]
     # NB: Minecraft doesn't handle grayscale well, make sure the images are in RGB.
+    declare __noise_file="${__IN_TEXTURES}/noise.png"
+    declare __overlay_file="${__IN_TEXTURES}/overlay_${__flavor}.png"
+    declare __texture_file="${__OUT_TEXTURES}/${__flavor}_${__color}.png"
+    mkdir -p "$(dirname "${__texture_file}")"
+    convert "${__noise_file}" \
+      -fill "${__rgb}" \
+      -tint 100 \
+      -gamma "${__gamma}" \
+      "${__overlay_file}" \
+      -composite \
+      -define png:color-type=2 \
+      -format png "${__texture_file}"
 
-  	convert $IN_TEXTURES/noise.png -fill "${colors[$color]}" -tint 100 -gamma ${gamma[$color]} \
-  			$IN_TEXTURES/overlay_"$flavor".png \
-  			-composite -define png:color-type=2 -format png $OUT_TEXTURES/"$flavor"_"$color".png
-  done
-done
+    declare __NAME="${__color}_${__BASE_NAME}_${__flavor}"
 
-# [Block State Generation]
+    # [Block State Generation]
+    declare __blockstate_file="${__OUT_BLOCKSTATES}/${__NAME}.json"
+    mkdir -p "$(dirname "${__blockstate_file}")"
+    declare __model_ref="${__MODID}:${__NAME}"
+    cat >"${__blockstate_file}" <<EOF
+{
+  "variants": {
+    "normal": {
+      "model": "${__model_ref}"
+    }
+  }
+}
+EOF
 
-for color in ${!colors[@]}
-do
-  for flavor in ${flavors[*]}
-  do
-  	NAME=$color"_"$BASE_NAME"_"$flavor;
-  	echo "{ \"variants\": {\"normal\": {\"model\": \""$MODID":"$NAME"\"} } }" > $OUT_BLOCKSTATES/$NAME.json
-  done
-done
+    # [Model Generation]
+    declare __block_model_file="${__OUT_MODELS_BLOCK}/${__NAME}.json"
+    mkdir -p "$(dirname "${__block_model_file}")"
+    declare __texture_ref="${__MODID}:blocks/${__flavor}_${__color}"
+    cat >"${__block_model_file}" <<EOF
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "${__texture_ref}"
+  }
+}
+EOF
 
-# [Model Generation]
+    declare __item_model_file="${__OUT_MODELS_ITEM}/${__NAME}.json"
+    mkdir -p "$(dirname "${__item_model_file}")"
+    declare __parent_ref="${__MODID}:block/${__NAME}"
+    cat >"${__item_model_file}" <<EOF
+{
+  "parent": "${__parent_ref}"
+}
+EOF
 
-for color in ${!colors[@]}
-do
-  for flavor in ${flavors[*]}
-  do
-  	NAME=$color"_"$BASE_NAME"_"$flavor;
-
-  	echo "{ \"parent\": \"minecraft:block/cube_all\", \"textures\": { \"all\": \""$MODID":blocks/"$flavor"_"$color"\" } }" > $OUT_MODELS_BLOCK/$NAME.json
-  	echo "{ \"parent\": \""$MODID":block/"$NAME"\" }" > $OUT_MODELS_ITEM/$NAME.json
-  done
-done
-
-# [Language Generation]
-
-echo "itemGroup.projecty=ProjectY" > $OUT_LANG/en_us.lang
-
-for color in ${!colors[@]}
-do
-  for flavor in ${flavors[*]}
-  do
-  	NAME=$color"_"$BASE_NAME"_"$flavor;
-  	echo "tile.$MODID.$NAME.name=${color^} ${BASE_NAME^} ${flavor^}" >> $OUT_LANG/en_us.lang
+    # [Language Generation]
+    declare lang_key="${__MODID}.${__NAME}.name"
+    declare lang_value
+    lang_value="$(
+      # Upper-case first letter of __color
+      echo -n "${__color:0:1}" | tr '[:lower:]' '[:upper:]'
+      # Keep remaining of __color unchanged
+      echo -n "${__color:1}"
+    ) ${__BASE_NAME} ${__flavor}"
+    echo >>"${__LANG_FILE}" "${lang_key}=${lang_value}"
   done
 done
 
