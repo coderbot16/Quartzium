@@ -88,5 +88,9 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
         exclude 'assets/projecty/textures/baseline'
+        exclude 'assets/projecty/models/baseline'
+        exclude 'assets/projecty/recipes/baseline'
     }
 }
+
+runClient.outputs.upToDateWhen { false }

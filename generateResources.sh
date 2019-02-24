@@ -8,6 +8,7 @@
 declare -r __MODID='projecty'
 declare -r __RESOURCES="./src/main/resources/assets/${__MODID}"
 declare -r __IN_TEXTURES="${__RESOURCES}/textures/baseline"
+declare -r __IN_MODELS="${__RESOURCES}/models/baseline"
 declare -r __OUT_TEXTURES="${__RESOURCES}/textures/blocks"
 declare -r __OUT_BLOCKSTATES="${__RESOURCES}/blockstates"
 declare -r __OUT_MODELS_BLOCK="${__RESOURCES}/models/block"
@@ -113,6 +114,20 @@ function main() {
       # [Language Generation]
       generate_display_name "${color_index}" "${flavor}" || exit 1
     done
+
+    # Crystals are a special case, and are generated separately.
+
+    # Generate texture
+    generate_texture "${color_index}" "crystal" || exit 1
+
+    # Generate blockstate
+    generate_crystal_blockstate "${color_index}" || exit 1
+
+    # Generate models
+    generate_crystal_models "${color_index}" || exit 1
+
+    # [Language Generation]
+    generate_display_name "${color_index}" "crystal" || exit 1
   done
 }
 
@@ -145,7 +160,8 @@ function create_resources_directories() {
 # @product
 # An initialized en_us language file
 function generate_language() {
-  echo >"${__LANG_FILE}" "itemGroup.${__MODID}=$(capitalize "${__MODID}")"
+  # NB: $(capitalize "${__MODID}") doesn't handle camel case
+  echo >"${__LANG_FILE}" "itemGroup.${__MODID}=ProjectY"
 }
 
 # Generates a texture, by compositing a colored noise with a flavor overlay
@@ -164,7 +180,7 @@ function generate_language() {
 # ?: >0: on failure
 function generate_texture() {
   # Both parameters are required
-  [ "${#}" -eq 2 ] || return 1
+  [[ "${#}" -eq 2 ]] || return 1
   local -ri color_index="${1}"
   local -r flavor="${2}"
 
@@ -203,7 +219,7 @@ function generate_texture() {
 # ?: >0: on failure
 function generate_blockstate() {
   # Both parameters are required
-  [ "${#}" -eq 2 ] || return 1
+  [[ "${#}" -eq 2 ]] || return 1
 
   local -ri color_index="${1}"
   local -r flavor="${2}"
@@ -225,6 +241,105 @@ function generate_blockstate() {
 EOF
 }
 
+# Generates a crystal blockstate json file for a given color index
+# @globals
+# __BASE_NAME: The registry base name
+# __COLORS_NAME: The colors name array
+# __MODID: The mod id
+# __OUT_BLOCKSTATES: The path of the blockstates
+# @params
+# 1: color_index: The color index
+# @product
+# Creates a blockstate json file in __OUT_BLOCKSTATES
+# @return
+# ?: >0: on failure
+function generate_crystal_blockstate() {
+  # The parameter is required
+  [[ "${#}" -eq 1 ]] || return 1
+
+  local -ri color_index="${1}"
+
+  local -r color_name="${__COLORS_NAME[${color_index}]}"
+  local -r registry_name="${color_name}_${__BASE_NAME}_crystal"
+  local -r blockstate_file="${__OUT_BLOCKSTATES}/${registry_name}.json"
+  local -r model_ref="${__MODID}:${registry_name}.obj"
+
+  # [Block State Generation]
+  cat >"${blockstate_file}" <<EOF
+{
+	"forge_marker": 1,
+	"variants": {
+		"facing=up": {
+			"model": "${model_ref}"
+		},
+		"facing=down": {
+			"model": "${model_ref}",
+			"x": 180
+		},
+		"facing=east": {
+			"model": "${model_ref}",
+			"x": 90,
+			"y": 90
+		},
+		"facing=west": {
+			"model": "${model_ref}",
+			"x": 90,
+			"y": 270
+		},
+		"facing=south": {
+			"model": "${model_ref}",
+			"x": 90,
+			"y": 180
+		},
+		"facing=north": {
+			"model": "${model_ref}",
+			"x": 90
+		},
+		"inventory": {
+			"model": "${model_ref}",
+			"transform": {
+				"gui": {
+					"translation": [0, 0.297483, 0],
+					"rotation": [30, 225, 0],
+					"scale": [1, 1, 1]
+				},
+				"ground": {
+					"translation": [0, 0.297483, 0],
+					"rotation": [0, 0, 0],
+					"scale": [0.5, 0.5, 0.5]
+				},
+				"fixed": {
+					"translation": [0, 0.297483, 0],
+					"rotation": [0, 0, 0],
+					"scale": [1, 1, 1]
+				},
+				"thirdperson_righthand": {
+					"translation": [0, 0.15, 0],
+					"rotation": [0, 45, 0],
+					"scale": [0.625, 0.625, 0.625]
+				},
+				"thirdperson_lefthand":	{
+					"translation": [0, 0.15, 0],
+					"rotation": [0, 225, 0],
+					"scale": [0.625, 0.625, 0.625]
+				},
+				"firstperson_righthand": {
+					"translation": [0, 0.15, 0],
+					"rotation": [0, 45, 0],
+					"scale": [0.6, 0.6, 0.6]
+				},
+				"firstperson_lefthand": {
+					"translation": [0, 0.15, 0],
+					"rotation": [0, 225, 0],
+					"scale": [0.6, 0.6, 0.6]
+				}
+			}
+		}
+	}
+}
+EOF
+}
+
 # Generates block and item model json files for a given color index and flavor
 # @globals
 # __BASE_NAME: The registry base name
@@ -242,7 +357,7 @@ EOF
 # ?: >0: on failurefunction generate_models() {
 function generate_models() {
   # Both parameters are required
-  [ "${#}" -eq 2 ] || return 1
+  [[ "${#}" -eq 2 ]] || return 1
   local -ri color_index="${1}"
   local -r flavor="${2}"
 
@@ -269,6 +384,43 @@ EOF
 EOF
 }
 
+# Generates crystal block and item model json files for a given color index
+# @globals
+# __BASE_NAME: The registry base name
+# __COLORS_NAME: The colors name array
+# __MODID: The mod id
+# __OUT_MODELS_BLOCK: The path of the block models
+# __OUT_MODELS_ITEM: The path of the item models
+# @params
+# 1: color_index: The color index
+# @product
+# Creates a block json model file in __OUT_MODELS_BLOCK
+# Creates an item json model file in __OUT_MODELS_ITEM
+# @return
+# ?: >0: on failurefunction generate_models() {
+function generate_crystal_models() {
+  # The parameter is required
+  [[ "${#}" -eq 1 ]] || return 1
+  local -ri color_index="${1}"
+
+  local -r color_name="${__COLORS_NAME[${color_index}]}"
+  local -r registry_name="${color_name}_${__BASE_NAME}_crystal"
+
+  local -r block_model_file="${__OUT_MODELS_BLOCK}/${registry_name}.obj"
+  local -r block_material_file="${__OUT_MODELS_BLOCK}/${registry_name}.mtl"
+  local -r texture_ref="${__MODID}:blocks\/crystal_${color_name}"
+
+  sed "s/mtllib icosahedron\.mtl/mtllib ${registry_name}\.mtl/" < "${__IN_MODELS}/icosahedron.obj" > ${block_model_file}
+  sed "s/noise\.png/${texture_ref}/" < "${__IN_MODELS}/icosahedron.mtl" > ${block_material_file}
+
+  local -r item_model_file="${__OUT_MODELS_ITEM}/${registry_name}.json"
+  cat >"${item_model_file}" <<EOF
+{
+  "forge_marker": 1
+}
+EOF
+}
+
 # Generates display-name entry into the language file
 # for the given color index and flavor
 # @globals
@@ -290,14 +442,22 @@ function generate_display_name() {
   local -r flavor="${2}"
 
   local -r color_name="${__COLORS_NAME[${color_index}]}"
+  local display_color=''
+  local color_part
+  # iterates space separated words in color_name
+  for color_part in ${color_name/_/ }; do
+    # build color display string by concatenating capitalized words
+    display_color+="$(capitalize "${color_part}") "
+  done
   local -r registry_name="${color_name}_${__BASE_NAME}_${flavor}"
 
-  local -r lang_key="${__MODID}.${registry_name}.name"
+  local -r lang_key="tile.${__MODID}.${registry_name}.name"
   local lang_value
-  lang_value="$(capitalize "${color_name}") $(capitalize "${__BASE_NAME}") $(capitalize "${flavor}")"
+  lang_value="${display_color}$(capitalize "${__BASE_NAME}") $(capitalize "${flavor}")"
   typeset -r lang_value
   echo >>"${__LANG_FILE}" "${lang_key}=${lang_value}"
 }
+
 
 ##### Utilities #####
 
@@ -309,7 +469,7 @@ function generate_display_name() {
 # ?: >0 error
 function capitalize() {
   # The argument is required
-  [ "${#}" -eq 1 ] || return 1
+  [[ "${#}" -eq 1 ]] || return 1
   # Upper-case first letter
   echo -n "${1:0:1}" | tr '[:lower:]' '[:upper:]'
   # Keep remaining of string unchanged
