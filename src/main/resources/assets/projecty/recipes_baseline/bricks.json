@@ -1,21 +1,16 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-	" B ",
-	"BSB",
-	" B "
-  ],
-  "key": {
-	"B": {
-	  "item": "projecty:@COLOR@_@BASE@_block"
-	},
-	"S": {
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+	{
 	  "item": "minecraft:stonebrick",
 	  "data": 0
+	},
+	{
+	  "item": "projecty:@COLOR@_@BASE@_block"
 	}
-  },
+  ],
   "result": {
-	"count": 4,
+	"count": 2,
 	"item": "projecty:@COLOR@_@BASE@_bricks"
   }
 }
