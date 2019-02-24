@@ -20,3 +20,8 @@ build
 # other
 eclipse
 run
+
+# generated resources
+src/main/resources/assets/projecty/blockstates
+src/main/resources/assets/projecty/models
+src/main/resources/assets/projecty/textures/blocks
