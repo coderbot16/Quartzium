@@ -17,7 +17,7 @@ import java.util.function.Function;
 
 @Mod.EventBusSubscriber(modid = ProjectY.MODID)
 public class ModBlocks {
-	public static PentaColorMap<Block> ORE;
+	public static PentaColorMap<BlockOre> ORE;
 	public static ColorMap<Block> CRYSTAL;
 	public static ColorMap<Block> BRICKS;
 	public static ColorMap<Block> BLOCK;
@@ -56,18 +56,18 @@ public class ModBlocks {
 		);
 	}
 
-	private static ColorMap<Block> registerForColors(RegistryEvent.Register<Block> event, String name, Function<Color, Block> factory) {
-		ColorMap<Block> flavor = new ColorMap<>(factory);
+	private static <T extends Block> ColorMap<T> registerForColors(RegistryEvent.Register<Block> event, String name, Function<Color, T> factory) {
+		ColorMap<T> flavor = new ColorMap<>(factory);
 
-		flavor.forEach((Color color, Block block) -> registerBasicBlock(event, color.getName() + '_' + name, block));
+		flavor.forEach((Color color, T block) -> registerBasicBlock(event, color.getName() + '_' + name, block));
 
 		return flavor;
 	}
 
-	private static PentaColorMap<Block> registerForPentaColors(RegistryEvent.Register<Block> event, String name, Function<PentaColor, Block> factory) {
-		PentaColorMap<Block> flavor = new PentaColorMap<>(factory);
+	private static <T extends Block> PentaColorMap<T> registerForPentaColors(RegistryEvent.Register<Block> event, String name, Function<PentaColor, T> factory) {
+		PentaColorMap<T> flavor = new PentaColorMap<>(factory);
 
-		flavor.forEach((PentaColor color, Block block) -> registerBasicBlock(event, color.getName() + '_' + name, block));
+		flavor.forEach((PentaColor color, T block) -> registerBasicBlock(event, color.getName() + '_' + name, block));
 
 		return flavor;
 	}

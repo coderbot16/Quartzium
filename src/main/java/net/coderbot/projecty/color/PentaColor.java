@@ -3,17 +3,19 @@ package net.coderbot.projecty.color;
 import net.minecraft.block.material.MapColor;
 
 public enum PentaColor {
-	WHITE(MapColor.SNOW),
-	BLUE(MapColor.BLUE),
-	GREEN(MapColor.GREEN),
-	RED(MapColor.RED),
-	BLACK(MapColor.BLACK);
+	WHITE(MapColor.SNOW, Color.WHITE),
+	BLUE(MapColor.BLUE, Color.BLUE),
+	GREEN(MapColor.GREEN, Color.GREEN),
+	RED(MapColor.RED, Color.RED),
+	BLACK(MapColor.BLACK, Color.BLACK);
 
 	private MapColor mapColor;
+	private Color full;
 	private static final PentaColor[] VALUES = values();
 
-	PentaColor(MapColor mapColor) {
+	PentaColor(MapColor mapColor, Color full) {
 		this.mapColor = mapColor;
+		this.full = full;
 	}
 
 	public String getName() {
@@ -22,6 +24,10 @@ public enum PentaColor {
 
 	public MapColor getColor() {
 		return this.mapColor;
+	}
+
+	public Color getFullColor() {
+		return this.full;
 	}
 
 	public static PentaColor fromOrdinal(int index) {

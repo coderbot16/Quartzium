@@ -19,6 +19,11 @@ public class ColorMap<T> {
 		return (T)map[color.ordinal()];
 	}
 
+	@SuppressWarnings("unchecked")
+	public T get(PentaColor color) {
+		return (T)map[color.getFullColor().ordinal()];
+	}
+
 	public void set(Color color, T value) {
 		map[color.ordinal()] = value;
 	}
@@ -28,6 +33,13 @@ public class ColorMap<T> {
 		for(int i = 0; i<16; i++) {
 			Color color = Color.fromOrdinal(i);
 			consumer.accept(color, (T)map[i]);
+		}
+	}
+
+	public void forEachPenta(BiConsumer<PentaColor, T> consumer) {
+		for(int i = 0; i<5; i++) {
+			PentaColor color = PentaColor.fromOrdinal(i);
+			consumer.accept(color, get(color));
 		}
 	}
 

@@ -35,6 +35,8 @@ public class ModItems {
 		PLATE = ModBlocks.PLATE.map(block -> register(event, block));
 		PLATFORM = ModBlocks.PLATFORM.map(block -> register(event, block));
 		SHIELD = ModBlocks.SHIELD.map(block -> register(event, block));
+
+		CRYSTAL.forEachPenta((color, item) -> ModBlocks.ORE.get(color).setCrystal(item));
 	}
 
 	@SubscribeEvent
