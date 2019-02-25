@@ -104,7 +104,7 @@ function main() {
     for flavor in "${__FLAVORS[@]}"; do
 
       # Generate texture
-      generate_texture "${color_index}" "${flavor}" || exit 1
+      generate_texture "${color_index}" "${flavor}" "0.0" || exit 1
 
       # Generate blockstate
       generate_blockstate "${color_index}" "${flavor}" || exit 1
@@ -116,10 +116,10 @@ function main() {
       generate_display_name "${color_index}" "${flavor}" || exit 1
     done
 
-    # Crystals are a special case, and are generated separately.
+    # << Crystals are a special case, and are generated separately. >>
 
     # Generate texture
-    generate_texture "${color_index}" "crystal" || exit 1
+    generate_texture "${color_index}" "crystal" "0.0" || exit 1
 
     # Generate blockstate
     generate_crystal_blockstate "${color_index}" || exit 1
@@ -129,6 +129,22 @@ function main() {
 
     # [Language Generation]
     generate_display_name "${color_index}" "crystal" || exit 1
+
+    # << Generate Lamp >>
+    generate_texture "${color_index}" "inverted_lamp" "0.0" || exit 1
+	generate_texture "${color_index}" "lamp" "0.55" || exit 1
+
+	# Generate blockstate
+    generate_lamp_blockstate "${color_index}" "lamp" "inverted_lamp" "lamp" || exit 1
+    generate_lamp_blockstate "${color_index}" "inverted_lamp" "lamp" "inverted_lamp" || exit 1
+
+    # Generate models
+    generate_models "${color_index}" "inverted_lamp" || exit 1
+    generate_models "${color_index}" "lamp" || exit 1
+
+    # [Language Generation]
+    generate_display_name "${color_index}" "lamp" || exit 1
+    generate_display_name "${color_index}" "inverted_lamp" || exit 1
   done
 }
 
@@ -175,22 +191,30 @@ function generate_language() {
 # @params
 # 1: color_index: The color index
 # 2: flavor: The flavor of block
+# 3: gamma_tweak: A value to subtract from the set gamma value (used for lamp textures)
 # @product
 # Creates a texture file in __OUT_TEXTURES
 # @return
 # ?: >0: on failure
 function generate_texture() {
   # Both parameters are required
-  [[ "${#}" -eq 2 ]] || return 1
+  [[ "${#}" -eq 3 ]] || return 1
   local -ri color_index="${1}"
   local -r flavor="${2}"
+  local -r gamma_tweak="${3}"
 
   local -r color_name="${__COLORS_NAME[${color_index}]}"
   local -r rgb="${__COLORS_RGB[${color_index}]}"
-  local -r gamma="${__COLORS_GAMMA[${color_index}]}"
+  local -r gamma_base="${__COLORS_GAMMA[${color_index}]}"
   local -r noise_file="${__IN_TEXTURES}/noise.png"
   local -r overlay_file="${__IN_TEXTURES}/overlay_${flavor}.png"
   local -r texture_file="${__OUT_TEXTURES}/${flavor}_${color_name}.png"
+
+  local gamma="$(bc <<< "${gamma_base}"-"${gamma_tweak}")";
+
+  case "${gamma}" in
+    *"-"*) gamma="0.2"
+  esac
 
   # NB: Minecraft doesn't handle grayscale well, make sure the images are in RGB.
   convert \
@@ -337,6 +361,53 @@ function generate_crystal_blockstate() {
 			}
 		}
 	}
+}
+EOF
+}
+
+# Generates a lamp blockstate json file for a given color index
+# @globals
+# __BASE_NAME: The registry base name
+# __COLORS_NAME: The colors name array
+# __MODID: The mod id
+# __OUT_BLOCKSTATES: The path of the blockstates
+# @params
+# 1: color_index: The color index
+# 2: flavor: The flavor of block/item
+# 3: lit: Name of lit model
+# 4: unlit: Name of unlit model
+# @product
+# Creates a blockstate json file in __OUT_BLOCKSTATES
+# @return
+# ?: >0: on failure
+function generate_lamp_blockstate() {
+  # All parameters are required
+  [[ "${#}" -eq 4 ]] || return 1
+
+  local -ri color_index="${1}"
+  local -r flavor="${2}"
+  local -r lit="${3}"
+  local -r unlit="${4}"
+
+  local -r color_name="${__COLORS_NAME[${color_index}]}"
+  local -r registry_name="${color_name}_${__BASE_NAME}_${flavor}"
+
+  local -r blockstate_file="${__OUT_BLOCKSTATES}/${registry_name}.json"
+
+  local -r model_lit_ref="${__MODID}:${color_name}_${__BASE_NAME}_${lit}"
+  local -r model_ref="${__MODID}:${color_name}_${__BASE_NAME}_${unlit}"
+
+  # [Block State Generation]
+  cat >"${blockstate_file}" <<EOF
+{
+  "variants": {
+    "lit=true": {
+      "model": "${model_lit_ref}"
+    },
+    "lit=false": {
+      "model": "${model_ref}"
+    }
+  }
 }
 EOF
 }

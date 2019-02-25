@@ -26,6 +26,8 @@ public class ModItems {
 	public static ColorMap<Item> PLATFORM;
 	public static ColorMap<Item> SHIELD;
 	public static ColorMap<Item> ENGINEERING_BRICKS;
+	public static ColorMap<Item> LAMP;
+	public static ColorMap<Item> INVERTED_LAMP;
 
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
@@ -37,6 +39,8 @@ public class ModItems {
 		PLATFORM = ModBlocks.PLATFORM.map(block -> register(event, block));
 		SHIELD = ModBlocks.SHIELD.map(block -> register(event, block));
 		ENGINEERING_BRICKS = ModBlocks.ENGINEERING_BRICKS.map(block -> register(event, block));
+		LAMP = ModBlocks.LAMP.map(block -> register(event, block));
+		INVERTED_LAMP = ModBlocks.INVERTED_LAMP.map(block -> register(event, block));
 
 		CRYSTAL.forEachPenta((color, item) -> ModBlocks.ORE.get(color).setCrystal(item));
 	}
@@ -57,6 +61,8 @@ public class ModItems {
 		PLATFORM.forEach((color, item) -> registerModel(item));
 		SHIELD.forEach((color, item) -> registerModel(item));
 		ENGINEERING_BRICKS.forEach((color, item) -> registerModel(item));
+		LAMP.forEach((color, item) -> registerModel(item));
+		INVERTED_LAMP.forEach((color, item) -> registerModel(item));
 	}
 
 	private static Item register(RegistryEvent.Register<Item> event, Block base) {

@@ -36,6 +36,8 @@ declare -ra __FLAVORS=(
   'platform'
   'shield'
   'engineering_bricks'
+  'lamp'
+  'inverted_lamp'
 )
 
 declare -a __COLORS_CONV=(

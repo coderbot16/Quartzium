@@ -2,6 +2,7 @@ package net.coderbot.projecty.init;
 
 import net.coderbot.projecty.ProjectY;
 import net.coderbot.projecty.blocks.BlockCrystal;
+import net.coderbot.projecty.blocks.BlockLamp;
 import net.coderbot.projecty.color.Color;
 import net.coderbot.projecty.color.ColorMap;
 import net.coderbot.projecty.blocks.BlockDecoration;
@@ -9,9 +10,12 @@ import net.coderbot.projecty.blocks.BlockOre;
 import net.coderbot.projecty.color.PentaColor;
 import net.coderbot.projecty.color.PentaColorMap;
 import net.minecraft.block.Block;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.function.Function;
 
@@ -25,6 +29,8 @@ public class ModBlocks {
 	public static ColorMap<Block> PLATFORM;
 	public static ColorMap<Block> SHIELD;
 	public static ColorMap<Block> ENGINEERING_BRICKS;
+	public static ColorMap<BlockLamp> LAMP;
+	public static ColorMap<BlockLamp> INVERTED_LAMP;
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -58,6 +64,14 @@ public class ModBlocks {
 
 		ENGINEERING_BRICKS = registerForColors(event, ProjectY.BASE_NAME + "_engineering_bricks", color ->
 				new BlockDecoration(color.getColor(), 2.0F, 10.0F, false)
+		);
+
+		LAMP = registerForColors(event, ProjectY.BASE_NAME + "_lamp", color ->
+				new BlockLamp(color.getColor(), 0.3F, 0.5F, false)
+		);
+
+		INVERTED_LAMP = registerForColors(event, ProjectY.BASE_NAME + "_inverted_lamp", color ->
+				new BlockLamp(color.getColor(), 0.3F, 0.5F, true)
 		);
 	}
 

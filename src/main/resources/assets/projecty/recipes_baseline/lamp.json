@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	" C ",
+	"CLC",
+	" C "
+  ],
+  "key": {
+	"C": {
+	  "item": "projecty:@COLOR@_@BASE@_crystal"
+	},
+	"L": {
+	  "item": "minecraft:redstone_lamp"
+	}
+  },
+  "result": {
+	"count": 1,
+	"item": "projecty:@COLOR@_@BASE@_lamp"
+  }
+}

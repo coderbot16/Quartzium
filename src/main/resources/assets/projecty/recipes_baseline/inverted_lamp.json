@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+	{
+	  "item": "projecty:@COLOR@_@BASE@_lamp"
+	},
+	{
+	  "item": "minecraft:redstone_torch"
+	}
+  ],
+  "result": {
+	"count": 1,
+	"item": "projecty:@COLOR@_@BASE@_inverted_lamp"
+  }
+}
