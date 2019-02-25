@@ -25,6 +25,7 @@ declare -ra __FLAVORS=(
   'plate'
   'platform'
   'shield'
+  'engineering_bricks'
 )
 
 # Color constants Setup
@@ -437,24 +438,16 @@ EOF
 # ?: >0: on failurefunction generate_models() {
 function generate_display_name() {
   # Both parameters are required
-  [ "${#}" -eq 2 ] || return 1
+  [[ "${#}" -eq 2 ]] || return 1
   local -ri color_index="${1}"
   local -r flavor="${2}"
 
   local -r color_name="${__COLORS_NAME[${color_index}]}"
-  local display_color=''
-  local color_part
-  # iterates space separated words in color_name
-  for color_part in ${color_name/_/ }; do
-    # build color display string by concatenating capitalized words
-    display_color+="$(capitalize "${color_part}") "
-  done
   local -r registry_name="${color_name}_${__BASE_NAME}_${flavor}"
 
   local -r lang_key="tile.${__MODID}.${registry_name}.name"
-  local lang_value
-  lang_value="${display_color}$(capitalize "${__BASE_NAME}") $(capitalize "${flavor}")"
-  typeset -r lang_value
+  local -r lang_value="$(capitalize_snake "${color_name}") $(capitalize "${__BASE_NAME}") $(capitalize_snake "${flavor}")"
+
   echo >>"${__LANG_FILE}" "${lang_key}=${lang_value}"
 }
 
@@ -476,6 +469,32 @@ function capitalize() {
   echo -n "${1:1}"
 }
 
+# Removes underscores from the string and then capitalizes all words
+# @params
+# 1: The string to Capitalize
+# @return
+# &1: The capitalized string
+# ?: >0 error
+function capitalize_snake() {
+  # The argument is required
+  [[ "${#}" -eq 1 ]] || return 1
+
+  local complete=''
+  local part
+  # iterates space separated words in color_name
+  for part in ${1/_/ }; do
+    # only add spaces between words
+  	if [[ "${complete}" != "" ]]
+    then
+    	complete+=" "
+    fi
+
+    # build color display string by concatenating capitalized words
+    complete+="$(capitalize "${part}")"
+  done
+
+  echo -n ${complete}
+}
 ##### Script start #####
 
 main "$@" # Run self

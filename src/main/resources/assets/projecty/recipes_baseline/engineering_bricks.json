@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	"CBC",
+	"BRB",
+	"CBC"
+  ],
+  "key": {
+	"C": {
+	  "item": "projecty:@COLOR@_@BASE@_crystal"
+	},
+	"B": {
+	  "item": "minecraft:stonebrick",
+	  "data": 0
+	},
+	"R": {
+	  "item": "minecraft:redstone"
+	}
+  },
+  "result": {
+	"count": 1,
+	"item": "projecty:@COLOR@_@BASE@_engineering_bricks"
+  }
+}

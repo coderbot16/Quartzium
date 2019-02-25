@@ -24,6 +24,7 @@ public class ModBlocks {
 	public static ColorMap<Block> PLATE;
 	public static ColorMap<Block> PLATFORM;
 	public static ColorMap<Block> SHIELD;
+	public static ColorMap<Block> ENGINEERING_BRICKS;
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -53,6 +54,10 @@ public class ModBlocks {
 
 		SHIELD = registerForColors(event, ProjectY.BASE_NAME + "_shield", color ->
 				new BlockDecoration(color.getColor(), 16.0F, 112.0F, true)
+		);
+
+		ENGINEERING_BRICKS = registerForColors(event, ProjectY.BASE_NAME + "_engineering_bricks", color ->
+				new BlockDecoration(color.getColor(), 2.0F, 10.0F, false)
 		);
 	}
 

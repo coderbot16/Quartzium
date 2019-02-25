@@ -35,6 +35,7 @@ declare -ra __FLAVORS=(
   'plate'
   'platform'
   'shield'
+  'engineering_bricks'
 )
 
 declare -a __COLORS_CONV=(
