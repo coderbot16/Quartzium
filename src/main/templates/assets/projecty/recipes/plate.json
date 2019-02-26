@@ -1,0 +1,25 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "CBC",
+    "BIB",
+    "CBC"
+  ],
+  "key": {
+    "C": {
+      "item": "projecty:${COLOR}_${BASE}_crystal"
+    },
+    "B": {
+      "item": "minecraft:stonebrick",
+      "data": 32767
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotBrick"
+    }
+  },
+  "result": {
+    "count": 1,
+    "item": "projecty:${COLOR}_${BASE}_plate"
+  }
+}

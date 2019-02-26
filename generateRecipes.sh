@@ -1,111 +1,56 @@
 #!/usr/bin/env bash
 
-declare -r __MODID="projecty"
-declare -r __RESOURCES="./src/main/resources/assets/${__MODID}"
-declare -r __IN_RECIPES="${__RESOURCES}/recipes_baseline"
-declare -r __OUT_RECIPES="${__RESOURCES}/recipes"
-declare -r __BASE_NAME='xychronite'
-
-# Color constants Setup
-declare -ra __COLORS_NAME=(
-  'white'
-  'orange'
-  'magenta'
-  'light_blue'
-  'yellow'
-  'lime'
-  'pink'
-  'gray'
-  'light_gray'
-  'cyan'
-  'purple'
-  'blue'
-  'brown'
-  'green'
-  'red'
-  'black'
-)
-
-declare -ri __COLORS_COUNT="${#__COLORS_NAME[@]}"
-
-declare -ra __FLAVORS=(
-  'bricks'
-  'block'
-  'crystal'
-  'plate'
-  'platform'
-  'shield'
-  'engineering_bricks'
-  'lamp'
-  'inverted_lamp'
-)
-
-declare -a __COLORS_CONV=(
-	'orange'
-	'magenta'
-	'light_blue'
-	'yellow'
-	'lime'
-	'pink'
-	'gray'
-	'light_gray'
-	'cyan'
-	'purple'
-	'brown'
-)
-
-declare -a __COLORS_BASE=(
-	'red'
-	'purple'
-	'blue'
-	'red'
-	'green'
-	'red'
-	'black'
-	'gray'
-	'blue'
-	'blue'
-	'orange'
-)
-
-declare -a __COLORS_MIXIN=(
-	'yellow'
-	'white'
-	'white'
-	'green'
-	'white'
-	'white'
-	'white'
-	'white'
-	'green'
-	'red'
-	'black'
-)
+source './resourcesConfig.sh' # Configuration of the generated resources
 
 function main() {
-	mkdir -p "${__OUT_RECIPES}"
+  mkdir -p "${__OUT_RECIPES}"
 
-	for ((__i = 0; __i < 11; __i += 1)); do
-		local target="${__COLORS_CONV[${__i}]}_${__BASE_NAME}_crystal"
-		local base="${__COLORS_BASE[${__i}]}_${__BASE_NAME}_crystal"
-		local mixin="${__COLORS_MIXIN[${__i}]}_${__BASE_NAME}_crystal"
-		local filename="combine_${target}.json"
-	
-		sed "s/TARGET/${target}/;s/BASE/${base}/;s/MIXIN/${mixin}/" < "${__IN_RECIPES}/combine.json" > "${__OUT_RECIPES}/${filename}"
-	done
-
-	for flavor in "${__FLAVORS[@]}"; do
-		for ((color_index = 0; color_index < __COLORS_COUNT; color_index += 1)); do
-			local color=${__COLORS_NAME[${color_index}]}
-
-			local target="${color}_${__BASE_NAME}_${flavor}"
-			local replacement="s/@COLOR@/${color}/;s/@BASE@/${__BASE_NAME}/"
-
-			sed "${replacement}" < "${__IN_RECIPES}/${flavor}.json" > "${__OUT_RECIPES}/${target}.json"
-		done
-	done
+  generate_crystal_combine_color_recipes
+  generate_block_color_flavor_recipes
 }
 
+# Generates crystal color mix recipes
+# @product
+# recipes/combine_${target}.json
+function generate_crystal_combine_color_recipes() {
+  for ((i = 0; i < __COLORS_CONV_COUNT; i += 1)); do
+    (
+      # envsubst need environment varialbes
+      # this () enclosed sub-shell isolates the exported environment variables
+      # from the main environment
+      # shellcheck disable=SC2030,SC2031 # These variables are isolated
+      export \
+        TARGET="${__COLORS_CONV[${i}]}_${__BASE_NAME}_crystal" \
+        BASE="${__COLORS_BASE[${i}]}_${__BASE_NAME}_crystal" \
+        MIXIN="${__COLORS_MIXIN[${i}]}_${__BASE_NAME}_crystal"
+      envsubst \
+        <"${__IN_RECIPES}/combine.json" \
+        >"${__OUT_RECIPES}/combine_${TARGET}.json"
+    )
+  done
+}
+
+# Generates crystal color mix recipes
+# @product
+# recipes/combine_${target}.json
+function generate_block_color_flavor_recipes() {
+  for flavor in "${__FLAVORS[@]}"; do
+    if [ -f "${__IN_RECIPES}/${flavor}.json" ]; then
+      for color in "${__COLORS_NAME[@]}"; do
+        (
+          # shellcheck disable=SC2030,SC2031 # These variables are isolated
+          export \
+            COLOR="${color}" \
+            BASE="${__BASE_NAME}"
+
+          envsubst \
+            <"${__IN_RECIPES}/${flavor}.json" \
+            >"${__OUT_RECIPES}/${color}_${__BASE_NAME}_${flavor}.json"
+        )
+      done
+    fi
+  done
+}
 ##### Script start #####
 
 main "$@" # Run self

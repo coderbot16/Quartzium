@@ -1,0 +1,25 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+	"CIC",
+	"IOI",
+	"CIC"
+  ],
+  "key": {
+	"C": {
+	  "item": "projecty:${COLOR}_${BASE}_crystal"
+	},
+	"O": {
+    "type": "forge:ore_dict",
+	  "ore": "obsidian"
+	},
+	"I": {
+    "type": "forge:ore_dict",
+	  "ore": "ingotIron"
+	}
+  },
+  "result": {
+	"count": 1,
+	"item": "projecty:${COLOR}_${BASE}_shield"
+  }
+}
