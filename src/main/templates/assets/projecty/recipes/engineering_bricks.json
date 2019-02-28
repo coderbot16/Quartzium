@@ -1,0 +1,25 @@
+{
+	"type": "forge:ore_shaped",
+  "pattern": [
+	"CBC",
+	"BRB",
+	"CBC"
+  ],
+  "key": {
+	"C": {
+	  "item": "projecty:${COLOR}_${BASE}_crystal"
+	},
+	"B": {
+	  "item": "minecraft:stonebrick",
+	  "data": 32767
+	},
+	"R": {
+	  "type": "forge:ore_dict",
+	  "ore": "dustRedstone"
+	}
+  },
+  "result": {
+	"count": 1,
+	"item": "projecty:${COLOR}_${BASE}_engineering_bricks"
+  }
+}

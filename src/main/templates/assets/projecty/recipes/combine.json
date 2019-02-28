@@ -2,14 +2,14 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
 	{
-	  "item": "projecty:BASE"
+	  "item": "projecty:${BASE}"
 	},
 	{
-	  "item": "projecty:MIXIN"
+	  "item": "projecty:${MIXIN}"
 	}
   ],
   "result": {
 	"count": 2,
-	"item": "projecty:TARGET"
+	"item": "projecty:${TARGET}"
   }
 }

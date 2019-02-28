@@ -2,91 +2,11 @@
 # Purpose: Combine the overlays and colored noise into flattened images
 # TODO: Recipes, items, etc
 
+source './bashlib/strings.sh' # The strings utility library
+
 ##### Global constants
 
-# [Initialization]
-declare -r __MODID='projecty'
-declare -r __RESOURCES="./src/main/resources/assets/${__MODID}"
-declare -r __IN_TEXTURES="${__RESOURCES}/textures/baseline"
-declare -r __IN_MODELS="${__RESOURCES}/models/baseline"
-declare -r __OUT_TEXTURES="${__RESOURCES}/textures/blocks"
-declare -r __OUT_BLOCKSTATES="${__RESOURCES}/blockstates"
-declare -r __OUT_MODELS_BLOCK="${__RESOURCES}/models/block"
-declare -r __OUT_MODELS_ITEM="${__RESOURCES}/models/item"
-declare -r __OUT_LANG="${__RESOURCES}/lang"
-declare -r __LANG_FILE="${__OUT_LANG}/en_us.lang"
-declare -r __BASE_NAME='xychronite'
-
-# Flavor constants
-declare -ra __FLAVORS=(
-  'ore'
-  'bricks'
-  'block'
-  'plate'
-  'platform'
-  'shield'
-  'engineering_bricks'
-)
-
-# Color constants Setup
-declare -ra __COLORS_NAME=(
-  'white'
-  'orange'
-  'magenta'
-  'light_blue'
-  'yellow'
-  'lime'
-  'pink'
-  'gray'
-  'light_gray'
-  'cyan'
-  'purple'
-  'blue'
-  'brown'
-  'green'
-  'red'
-  'black'
-)
-
-declare -ri __COLORS_COUNT="${#__COLORS_NAME[@]}"
-
-declare -ra __COLORS_RGB=(
-  'rgb(255,255,255)'
-  'rgb(100,50,0)'
-  'rgb(100,0,100)'
-  'rgb(0,0,100)'
-  'rgb(100,100,0)'
-  'rgb(0,100,0)'
-  'rgb(100,0,0)'
-  'rgb(0,0,0)'
-  'rgb(0,0,0)'
-  'rgb(50,100,100)'
-  'rgb(100,0,100)'
-  'rgb(0,0,100)'
-  'rgb(150,75,0)'
-  'rgb(0,100,0)'
-  'rgb(100,0,0)'
-  'rgb(0,0,0)'
-)
-
-declare -ra __COLORS_GAMMA=(
-  '1.0'
-  '1.0'
-  '1.2'
-  '1.2'
-  '0.7'
-  '1.2'
-  '1.2'
-  '0.4'
-  '0.7'
-  '1.2'
-  '0.7'
-  '0.7'
-  '0.7'
-  '0.7'
-  '0.7'
-  '0.2'
-)
+source './resourcesConfig.sh' # Configuration of the generated resources
 
 function main() {
 
@@ -132,9 +52,9 @@ function main() {
 
     # << Generate Lamp >>
     generate_texture "${color_index}" "inverted_lamp" "0.0" || exit 1
-	generate_texture "${color_index}" "lamp" "0.55" || exit 1
+    generate_texture "${color_index}" "lamp" "0.55" || exit 1
 
-	# Generate blockstate
+    # Generate blockstate
     generate_lamp_blockstate "${color_index}" "lamp" "inverted_lamp" "lamp" || exit 1
     generate_lamp_blockstate "${color_index}" "inverted_lamp" "lamp" "inverted_lamp" || exit 1
 
@@ -177,7 +97,7 @@ function create_resources_directories() {
 # @product
 # An initialized en_us language file
 function generate_language() {
-  # NB: $(capitalize "${__MODID}") doesn't handle camel case
+  # NB: $(strings::capitalize "${__MODID}") doesn't handle camel case
   echo >"${__LANG_FILE}" "itemGroup.${__MODID}=ProjectY"
 }
 
@@ -198,10 +118,10 @@ function generate_language() {
 # ?: >0: on failure
 function generate_texture() {
   # Both parameters are required
-  [[ "${#}" -eq 3 ]] || return 1
+  [[ ${#} -eq 3 ]] || return 1
   local -ri color_index="${1}"
   local -r flavor="${2}"
-  local -r gamma_tweak="${3}"
+  local -r gamma_tweak="${3:-0.0}"
 
   local -r color_name="${__COLORS_NAME[${color_index}]}"
   local -r rgb="${__COLORS_RGB[${color_index}]}"
@@ -210,11 +130,8 @@ function generate_texture() {
   local -r overlay_file="${__IN_TEXTURES}/overlay_${flavor}.png"
   local -r texture_file="${__OUT_TEXTURES}/${flavor}_${color_name}.png"
 
-  local gamma="$(bc <<< "${gamma_base}"-"${gamma_tweak}")";
-
-  case "${gamma}" in
-    *"-"*) gamma="0.2"
-  esac
+  local gamma
+  gamma="$(bc <<<"a=${gamma_base}; b=${gamma_tweak}; if(a > b) a-b else 0.2")"
 
   # NB: Minecraft doesn't handle grayscale well, make sure the images are in RGB.
   convert \
@@ -244,7 +161,7 @@ function generate_texture() {
 # ?: >0: on failure
 function generate_blockstate() {
   # Both parameters are required
-  [[ "${#}" -eq 2 ]] || return 1
+  [[ ${#} -eq 2 ]] || return 1
 
   local -ri color_index="${1}"
   local -r flavor="${2}"
@@ -280,7 +197,7 @@ EOF
 # ?: >0: on failure
 function generate_crystal_blockstate() {
   # The parameter is required
-  [[ "${#}" -eq 1 ]] || return 1
+  [[ ${#} -eq 1 ]] || return 1
 
   local -ri color_index="${1}"
 
@@ -382,7 +299,7 @@ EOF
 # ?: >0: on failure
 function generate_lamp_blockstate() {
   # All parameters are required
-  [[ "${#}" -eq 4 ]] || return 1
+  [[ ${#} -eq 4 ]] || return 1
 
   local -ri color_index="${1}"
   local -r flavor="${2}"
@@ -429,7 +346,7 @@ EOF
 # ?: >0: on failurefunction generate_models() {
 function generate_models() {
   # Both parameters are required
-  [[ "${#}" -eq 2 ]] || return 1
+  [[ ${#} -eq 2 ]] || return 1
   local -ri color_index="${1}"
   local -r flavor="${2}"
 
@@ -472,7 +389,7 @@ EOF
 # ?: >0: on failurefunction generate_models() {
 function generate_crystal_models() {
   # The parameter is required
-  [[ "${#}" -eq 1 ]] || return 1
+  [[ ${#} -eq 1 ]] || return 1
   local -ri color_index="${1}"
 
   local -r color_name="${__COLORS_NAME[${color_index}]}"
@@ -480,10 +397,13 @@ function generate_crystal_models() {
 
   local -r block_model_file="${__OUT_MODELS_BLOCK}/${registry_name}.obj"
   local -r block_material_file="${__OUT_MODELS_BLOCK}/${registry_name}.mtl"
-  local -r texture_ref="${__MODID}:blocks\/crystal_${color_name}"
+  local -r texture_ref="${__MODID}:blocks/crystal_${color_name}"
 
-  sed "s/mtllib icosahedron\.mtl/mtllib ${registry_name}\.mtl/" < "${__IN_MODELS}/icosahedron.obj" > ${block_model_file}
-  sed "s/noise\.png/${texture_ref}/" < "${__IN_MODELS}/icosahedron.mtl" > ${block_material_file}
+  local obj_model obj_material
+  obj_model="$(cat "${__IN_MODELS_BLOCK}/icosahedron.obj")"
+  echo >"${block_model_file}" "${obj_model/mtllib icosahedron.mtl/mtllib ${registry_name}.mtl}"
+  obj_material="$(cat "${__IN_MODELS_BLOCK}/icosahedron.mtl")"
+  echo >"${block_material_file}" "${obj_material/noise.png/${texture_ref}}"
 
   local -r item_model_file="${__OUT_MODELS_ITEM}/${registry_name}.json"
   cat >"${item_model_file}" <<EOF
@@ -509,7 +429,7 @@ EOF
 # ?: >0: on failurefunction generate_models() {
 function generate_display_name() {
   # Both parameters are required
-  [[ "${#}" -eq 2 ]] || return 1
+  [[ ${#} -eq 2 ]] || return 1
   local -ri color_index="${1}"
   local -r flavor="${2}"
 
@@ -517,55 +437,11 @@ function generate_display_name() {
   local -r registry_name="${color_name}_${__BASE_NAME}_${flavor}"
 
   local -r lang_key="tile.${__MODID}.${registry_name}.name"
-  local -r lang_value="$(capitalize_snake "${color_name}") $(capitalize "${__BASE_NAME}") $(capitalize_snake "${flavor}")"
+  local -r lang_value="$(strings::capitalize_snake "${color_name}") $(strings::capitalize "${__BASE_NAME}") $(strings::capitalize_snake "${flavor}")"
 
   echo >>"${__LANG_FILE}" "${lang_key}=${lang_value}"
 }
 
-
-##### Utilities #####
-
-# Capitalize the first letter of the string argument
-# @params
-# 1: The string to Capitalize
-# @return
-# &1: The capitalized string
-# ?: >0 error
-function capitalize() {
-  # The argument is required
-  [[ "${#}" -eq 1 ]] || return 1
-  # Upper-case first letter
-  echo -n "${1:0:1}" | tr '[:lower:]' '[:upper:]'
-  # Keep remaining of string unchanged
-  echo -n "${1:1}"
-}
-
-# Removes underscores from the string and then capitalizes all words
-# @params
-# 1: The string to Capitalize
-# @return
-# &1: The capitalized string
-# ?: >0 error
-function capitalize_snake() {
-  # The argument is required
-  [[ "${#}" -eq 1 ]] || return 1
-
-  local complete=''
-  local part
-  # iterates space separated words in color_name
-  for part in ${1/_/ }; do
-    # only add spaces between words
-  	if [[ "${complete}" != "" ]]
-    then
-    	complete+=" "
-    fi
-
-    # build color display string by concatenating capitalized words
-    complete+="$(capitalize "${part}")"
-  done
-
-  echo -n ${complete}
-}
 ##### Script start #####
 
 main "$@" # Run self

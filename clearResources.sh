@@ -1,7 +1,10 @@
-#!/bin/sh
-rm -r src/main/resources/assets/projecty/blockstates
-rm -r src/main/resources/assets/projecty/lang
-rm -r src/main/resources/assets/projecty/models/block
-rm -r src/main/resources/assets/projecty/models/item
-rm -r src/main/resources/assets/projecty/recipes
-rm -r src/main/resources/assets/projecty/textures/blocks
+#!/usr/bin/env bash
+
+source ./resourcesConfig.sh
+
+find "${__RESOURCES}/blockstates" -delete 2>/dev/null
+find "${__RESOURCES}/lang" -delete 2>/dev/null
+find "${__RESOURCES}/models/block" -delete 2>/dev/null
+find "${__RESOURCES}/models/item" -delete 2>/dev/null
+find "${__RESOURCES}/recipes" -delete 2>/dev/null
+find "${__RESOURCES}/textures/blocks" -delete 2>/dev/null

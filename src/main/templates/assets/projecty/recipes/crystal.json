@@ -2,11 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
 	{
-	  "item": "projecty:@COLOR@_@BASE@_block"
+	  "item": "projecty:${COLOR}_${BASE}_block"
 	}
   ],
   "result": {
 	"count": 9,
-	"item": "projecty:@COLOR@_@BASE@_crystal"
+	"item": "projecty:${COLOR}_${BASE}_crystal"
   }
 }
