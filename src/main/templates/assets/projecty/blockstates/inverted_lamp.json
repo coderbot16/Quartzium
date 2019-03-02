@@ -2,10 +2,10 @@
   "forge_marker": 1,
   "variants": {
     "lit=true": {
-      "model": "${MODEL_LIT}"
+      "model": "${MODEL}"
     },
     "lit=false": {
-      "model": "${MODEL}"
+      "model": "${MODEL_LIT}"
     },
     "inventory": {
       "model": "${MODEL_LIT}"
