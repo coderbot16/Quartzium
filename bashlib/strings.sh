@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+declare __strings_sh
+
+if [[ ${__strings_sh:-0} -gt 0 ]]; then
+  # do not include more than once
+  exit
+fi
+
 ##### Strings utility library #####
 
 # Capitalize the first letter of the string argument
@@ -43,15 +50,15 @@ function strings::capitalize_snake() {
   echo -n "${complete}"
 }
 
-if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then
+if [[ ${BASH_SOURCE[0]} != "${0}" ]]; then
+  __strings_sh=1
+else
   (
     declare functions
     functions=$(declare -F)
     cat >&2 <<EOF
 ${BASH_SOURCE[0]} is an utility library.
 It needs to be sourced with:
-. ${BASH_SOURCE[0]}
-or
 source ${BASH_SOURCE[0]}
 
 Available functions:
@@ -59,10 +66,5 @@ Available functions:
 ${functions//declare -f /}
 EOF
   )
-  exit 1
-elif [ -z "${__strings_sh}" ]; then
-  declare __strings_sh=1
-else
-  echo >&2 "${BASH_SOURCE[0]} sourced more than once!"
   exit 1
 fi

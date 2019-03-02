@@ -1,6 +1,6 @@
 # Blender v2.79 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib icosahedron.mtl
+mtllib ${MTL}
 v 0.500000 -0.132154 0.500000
 v 0.621084 0.052847 0.587972
 v 0.453751 0.052847 0.642342

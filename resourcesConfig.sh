@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2034 # These variables are meant to be sourced and not used here
 
+declare -i __resourcesConfig_sh
+
+if [[ ${__resourcesConfig_sh:-0} -gt 0 ]]; then
+  # do not include more than once
+  exit
+fi
+
 # [Initialization]
 declare -r __MODID='projecty'
 declare -r __TEMPLATES="./src/main/templates/assets/${__MODID}"
@@ -15,7 +22,7 @@ declare -r __OUT_BLOCKSTATES="${__RESOURCES}/blockstates"
 declare -r __OUT_LANG="${__RESOURCES}/lang"
 declare -r __OUT_MODELS_BLOCK="${__RESOURCES}/models/block"
 declare -r __OUT_MODELS_ITEM="${__RESOURCES}/models/item"
-declare -r __OUT_TEXTURES="${__RESOURCES}/textures/blocks"
+declare -r __OUT_TEXTURES_BLOCK="${__RESOURCES}/textures/blocks"
 declare -r __OUT_RECIPES="${__RESOURCES}/recipes"
 declare -r __LANG_FILE="${__OUT_LANG}/en_us.lang"
 declare -r __BASE_NAME='xychronite'
@@ -29,6 +36,49 @@ declare -ra __FLAVORS=(
   'platform'
   'shield'
   'engineering_bricks'
+  'lamp'
+  'inverted_lamp'
+  'crystal'
+)
+declare -ri __FLAVORS_COUNT="${#__FLAVORS[@]}"
+
+declare -ra __FLAVORS_GAMMA_TWEAK=(
+  '0.0'
+  '0.0'
+  '0.0'
+  '0.0'
+  '0.0'
+  '0.0'
+  '0.0'
+  '0.0'
+  '0.0'
+  '0.55'
+)
+
+declare -ra __FLAVORS_MODEL=(
+  'cube'
+  'cube'
+  'cube'
+  'cube'
+  'cube'
+  'cube'
+  'cube'
+  'cube'
+  'cube'
+  'icosahedron'
+)
+
+declare -ra __FLAVORS_BLOCKSTATE=(
+  'cube'
+  'cube'
+  'cube'
+  'cube'
+  'cube'
+  'cube'
+  'cube'
+  'lamp'
+  'lamp'
+  'icosahedron'
 )
 
 # Color constants Setup
@@ -133,23 +183,16 @@ declare -ra __COLORS_GAMMA=(
   '0.2'
 )
 
-if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then
+if [[ ${BASH_SOURCE[0]} != "${0}" ]]; then
+  __resourcesConfig_sh=1
+else
   (
-    declare functions
-    functions=$(declare -F)
     cat >&2 <<EOF
 ${BASH_SOURCE[0]} is containing global setings for resources generation.
 It is not meant to be run stand-alone.
 To load these settings into your script, simply do
-. ${BASH_SOURCE[0]}
-or
 source ${BASH_SOURCE[0]}
 EOF
   )
-  exit 1
-elif [ -z "${__resourcesConfig_sh}" ]; then
-  declare __resourcesConfig_sh=1
-else
-  echo >&2 "${BASH_SOURCE[0]} sourced more than once!"
   exit 1
 fi
