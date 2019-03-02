@@ -50,9 +50,9 @@ declare -ra __FLAVORS_GAMMA_TWEAK=(
   '0.0'
   '0.0'
   '0.0'
-  '0.0'
-  '0.0'
   '0.55'
+  '0.0'
+  '0.0'
 )
 
 declare -ra __FLAVORS_MODEL=(
