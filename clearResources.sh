@@ -1,10 +1,21 @@
 #!/usr/bin/env bash
+# Cleanup resources
 
 source ./resourcesConfig.sh
 
-find "${__RESOURCES}/blockstates" -delete 2>/dev/null
-find "${__RESOURCES}/lang" -delete 2>/dev/null
-find "${__RESOURCES}/models/block" -delete 2>/dev/null
-find "${__RESOURCES}/models/item" -delete 2>/dev/null
-find "${__RESOURCES}/recipes" -delete 2>/dev/null
-find "${__RESOURCES}/textures/blocks" -delete 2>/dev/null
+function main() {
+  local directory
+  for directory in \
+    "blockstates" \
+    "lang" \
+    "models" \
+    "recipes" \
+    "textures"; do
+
+    find "${__RESOURCES}/${directory}" -delete 2>/dev/null
+  done
+}
+
+##### Script start #####
+
+main "${@}" # Run self
