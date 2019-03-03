@@ -87,7 +87,7 @@ public class ModItems {
 		INVERTED_LAMP.forEach((color, item) -> patchModel(registry, item));
 
 		ModBlocks.ORE.forEach((color, block) -> patchModel(registry, block));
-		ModBlocks.CRYSTAL.forEach((color, block) -> patchModel(registry, block));
+		ModBlocks.CRYSTAL.forEach((color, block) -> patchModel(registry, block, "facing=up", "facing=down", "facing=east", "facing=west", "facing=south", "facing=north"));
 		ModBlocks.BRICKS.forEach((color, block) -> patchModel(registry, block));
 		ModBlocks.BLOCK.forEach((color, block) -> patchModel(registry, block));
 		ModBlocks.PLATE.forEach((color, block) -> patchModel(registry, block));

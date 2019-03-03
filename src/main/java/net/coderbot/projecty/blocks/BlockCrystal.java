@@ -29,6 +29,8 @@ public class BlockCrystal extends Block {
 	public BlockCrystal(MapColor color) {
 		super(Material.GLASS, color);
 		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.DOWN));
+
+		setLightLevel(8.0F / 15.0F);
 	}
 
 	@Override
