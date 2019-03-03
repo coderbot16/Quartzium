@@ -1,12 +1,16 @@
 package net.coderbot.projecty.init;
 
 import net.coderbot.projecty.ProjectY;
+import net.coderbot.projecty.client.SimpleBakedModelBright;
 import net.coderbot.projecty.color.ColorMap;
 import net.coderbot.projecty.color.PentaColorMap;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.util.registry.IRegistry;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
@@ -15,6 +19,8 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+
+import java.util.HashSet;
 
 @Mod.EventBusSubscriber(modid = ProjectY.MODID)
 public class ModItems {
@@ -65,6 +71,33 @@ public class ModItems {
 		INVERTED_LAMP.forEach((color, item) -> registerModel(item));
 	}
 
+	@SubscribeEvent
+	public static void patchBakedModels(ModelBakeEvent event) {
+		IRegistry<ModelResourceLocation, IBakedModel> registry = event.getModelRegistry();
+
+		ORE.forEach((color, item) -> patchModel(registry, item));
+		CRYSTAL.forEach((color, item) -> patchModel(registry, item));
+		BRICKS.forEach((color, item) -> patchModel(registry, item));
+		BLOCK.forEach((color, item) -> patchModel(registry, item));
+		PLATE.forEach((color, item) -> patchModel(registry, item));
+		PLATFORM.forEach((color, item) -> patchModel(registry, item));
+		SHIELD.forEach((color, item) -> patchModel(registry, item));
+		ENGINEERING_BRICKS.forEach((color, item) -> patchModel(registry, item));
+		LAMP.forEach((color, item) -> patchModel(registry, item));
+		INVERTED_LAMP.forEach((color, item) -> patchModel(registry, item));
+
+		ModBlocks.ORE.forEach((color, block) -> patchModel(registry, block));
+		ModBlocks.CRYSTAL.forEach((color, block) -> patchModel(registry, block));
+		ModBlocks.BRICKS.forEach((color, block) -> patchModel(registry, block));
+		ModBlocks.BLOCK.forEach((color, block) -> patchModel(registry, block));
+		ModBlocks.PLATE.forEach((color, block) -> patchModel(registry, block));
+		ModBlocks.PLATFORM.forEach((color, block) -> patchModel(registry, block));
+		ModBlocks.SHIELD.forEach((color, block) -> patchModel(registry, block));
+		ModBlocks.ENGINEERING_BRICKS.forEach((color, block) -> patchModel(registry, block));
+		ModBlocks.LAMP.forEach((color, block) -> patchModel(registry, block, "lit=true", "lit=false"));
+		ModBlocks.INVERTED_LAMP.forEach((color, block) -> patchModel(registry, block, "lit=true", "lit=false"));
+	}
+
 	private static Item register(RegistryEvent.Register<Item> event, Block base) {
 		Item item = new ItemBlock(base);
 		item.setRegistryName(base.getRegistryName());
@@ -76,5 +109,32 @@ public class ModItems {
 
 	private static void registerModel(Item item) {
 		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+	}
+
+	private static void patchModel(IRegistry<ModelResourceLocation, IBakedModel> registry, Item item) {
+		ModelResourceLocation location = new ModelResourceLocation(item.getRegistryName(), "inventory");
+
+		IBakedModel model = registry.getObject(location);
+		registry.putObject(location, new SimpleBakedModelBright(model, new HashSet<>()));
+	}
+
+	private static final String[] NORMAL = new String[] { "normal" };
+	private static void patchModel(IRegistry<ModelResourceLocation, IBakedModel> registry, Block block, String... variants) {
+		if(variants.length == 0) {
+			variants = NORMAL;
+		}
+
+		for(String variant: variants) {
+			ModelResourceLocation location = new ModelResourceLocation(block.getRegistryName(), variant);
+
+			IBakedModel model = registry.getObject(location);
+
+			if(model==null) {
+				System.out.println("Couldn't get block model for: "+location);
+				continue;
+			}
+
+			registry.putObject(location, new SimpleBakedModelBright(model, new HashSet<>()));
+		}
 	}
 }
