@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# Purpose: Combine the overlays and colored noise into flattened images
-# TODO: Recipes, items, etc
 source './bashlib/strings.sh' # The strings utility library
 
 ##### Global constants
@@ -15,27 +13,59 @@ function main() {
   # Initialize language file
   generate_language
 
-  # Generate colorized noise
-  generate_base_textures
-
-  # Copy overlay textures
-  copy_overlay_textures
-
   local -i color_index
   local -i flavor_index
-  local flavor flavor_gamma_tweak flavor_model flavor_blockstate
+  local -i functional_index
+  local flavor functional flavor_gamma_tweak flavor_model flavor_blockstate
   local rgb
   local gamma
+
+  # Copy flavor overlay textures
+  for ((flavor_index = 0; flavor_index < __FLAVORS_COUNT; flavor_index += 1)); do
+    local flavor="${__FLAVORS[flavor_index]}"
+    local overlay_file="${__IN_TEXTURES}/overlay_${flavor}.png"
+    local texture_file="${__OUT_TEXTURES_BLOCK}/overlay_${flavor}.png"
+
+	cp ${overlay_file} ${texture_file}
+  done
+
+  # Copy functional overlay textures
+  for ((functional_index = 0; functional_index < __FUNCTIONAL_COUNT; functional_index += 1)); do
+    functional="${__FUNCTIONAL[functional_index]}"
+    local overlay_file="${__IN_TEXTURES}/overlay_${functional}.png"
+    local texture_file="${__OUT_TEXTURES_BLOCK}/overlay_${functional}.png"
+
+	cp ${overlay_file} ${texture_file}
+
+	local overlay_file="${__IN_TEXTURES}/overlay_${functional}_vertical.png"
+    local texture_file="${__OUT_TEXTURES_BLOCK}/overlay_${functional}_vertical.png"
+
+	cp ${overlay_file} ${texture_file}
+  done
+
+  # Generate colorized noise
+  for ((color_index = 0; color_index < __COLORS_COUNT; color_index += 1)); do
+	generate_noise_texture "${color_index}" "" "0.0"
+	generate_noise_texture "${color_index}" "_dark" "0.7"
+  done
+
+  # Generate models, blockstates, and language files for functional blocks
+  for ((functional_index = 0; functional_index < __FUNCTIONAL_COUNT; functional_index += 1)); do
+    color_index="${__FUNCTIONAL_COLOR_INDICES[functional_index]}"
+    functional="${__FUNCTIONAL[functional_index]}"
+
+    generate_cube_blockstate_simple "${color_index}" "${functional}"
+    generate_column_model "${color_index}" "${functional}"
+    generate_display_name_simple "${functional}"
+  done
+
+  # Generate models, blockstates, and language files for flavored blcoks
   for ((color_index = 0; color_index < __COLORS_COUNT; color_index += 1)); do
     for ((flavor_index = 0; flavor_index < __FLAVORS_COUNT; flavor_index += 1)); do
 
       flavor="${__FLAVORS[flavor_index]}"
       flavor_model="${__FLAVORS_MODEL[flavor_index]}"
       flavor_blockstate="${__FLAVORS_BLOCKSTATE[flavor_index]}"
-      flavor_gamma_tweak="${__FLAVORS_GAMMA_TWEAK[flavor_index]}"
-
-      # Generate texture
-      # generate_texture "${color_index}" "${flavor}" "${flavor_gamma_tweak}"
 
       # Generate models
       "generate_${flavor_model}_model" "${color_index}" "${flavor}"
@@ -83,23 +113,6 @@ function create_resources_directories() {
 function generate_language() {
   # NB: $(strings::capitalize "${__MODID}") doesn't handle camel case
   echo >"${__LANG_FILE}" "itemGroup.${__MODID}=Quartzium"
-}
-
-function copy_overlay_textures() {
-	for ((flavor_index = 0; flavor_index < __FLAVORS_COUNT; flavor_index += 1)); do
-		local flavor="${__FLAVORS[flavor_index]}"
-		local overlay_file="${__IN_TEXTURES}/overlay_${flavor}.png"
-		local texture_file="${__OUT_TEXTURES_BLOCK}/overlay_${flavor}.png"
-
-		cp ${overlay_file} ${texture_file}
-	done
-}
-
-function generate_base_textures() {
-	for ((color_index = 0; color_index < __COLORS_COUNT; color_index += 1)); do
-		generate_noise_texture "${color_index}" "" "0.0"
-		generate_noise_texture "${color_index}" "_dark" "0.7"
-	done
 }
 
 # Generates a colored noise texture from a white variant
@@ -216,6 +229,41 @@ function generate_cube_blockstate() {
   (
     # shellcheck disable=SC2030,SC2031 # These variables are isolated
     export MODEL="${__MODID}:${registry_name}"
+
+    envsubst \
+      <"${__IN_BLOCKSTATES}/cube.json" \
+      >"${__OUT_BLOCKSTATES}/${registry_name}.json"
+  )
+}
+
+# Generates a blockstate json file for a given color index and flavor, but assuming there is only one color per flavor.
+# @globals
+# __BASE_NAME: The registry base name
+# __COLORS_NAME: The colors name array
+# __MODID: The mod id
+# __OUT_BLOCKSTATES: The path of the blockstates
+# @params
+# 1: color_index: The color index
+# 2: flavor: The flavor of block/item
+# @product
+# Creates a blockstate json file in __OUT_BLOCKSTATES
+# @return
+# ?: >0: on failure
+function generate_cube_blockstate_simple() {
+  # Both parameters are required
+  [[ ${#} -eq 2 ]] || return 1
+
+  local -ri color_index="${1}"
+  local -r flavor="${2}"
+
+  local -r color_name="${__COLORS_NAME[${color_index}]}"
+  local -r registry_name="${__BASE_NAME}_${flavor}"
+  local -r registry_name_model="${color_name}_${__BASE_NAME}_${flavor}"
+
+  # [Block State Generation]
+  (
+    # shellcheck disable=SC2030,SC2031 # These variables are isolated
+    export MODEL="${__MODID}:${registry_name_model}"
 
     envsubst \
       <"${__IN_BLOCKSTATES}/cube.json" \
@@ -404,6 +452,56 @@ function generate_cube_model() {
   )
 }
 
+# Generates column block and item model json files for a given color index and flavor
+# @globals
+# __BASE_NAME: The registry base name
+# __COLORS_NAME: The colors name array
+# __MODID: The mod id
+# __OUT_MODELS_BLOCK: The path of the block models
+# __OUT_MODELS_ITEM: The path of the item models
+# @params
+# 1: color_index: The color index
+# 2: flavor: The flavor of block/item
+# @product
+# Creates a block json model file in __OUT_MODELS_BLOCK
+# Creates an item json model file in __OUT_MODELS_ITEM
+# @return
+# ?: >0: on failure
+function generate_column_model() {
+  # Both parameters are required
+  [[ ${#} -eq 2 ]] || return 1
+  local -ri color_index="${1}"
+  local -r flavor="${2}"
+
+  local -r color_name="${__COLORS_NAME[${color_index}]}"
+  local -r registry_name="${color_name}_${__BASE_NAME}_${flavor}"
+  local -r registry_name_simple="${__BASE_NAME}_${flavor}"
+
+  # Generate Block model
+  (
+    # shellcheck disable=SC2030,SC2031 # These variables are isolated
+    export \
+      TEXTURE_NOISE="${__MODID}:blocks/noise_${color_name}" \
+      TEXTURE_OVERLAY="${__MODID}:blocks/overlay_${flavor}" \
+      TEXTURE_OVERLAY_VERTICAL="${__MODID}:blocks/overlay_${flavor}_vertical"
+
+    envsubst \
+      <"${__IN_MODELS_BLOCK}/column.json" \
+      >"${__OUT_MODELS_BLOCK}/${registry_name}.json"
+  )
+
+  # Generate Item model
+  (
+    # shellcheck disable=SC2030,SC2031 # These variables are isolated
+    export \
+      PARENT="${__MODID}:block/${registry_name}"
+
+    envsubst \
+      <"${__IN_MODELS_ITEM}/column.json" \
+      >"${__OUT_MODELS_ITEM}/${registry_name_simple}.json"
+  )
+}
+
 # Generates crystal block and item model json files for a given color index
 # @globals
 # __BASE_NAME: The registry base name
@@ -480,6 +578,32 @@ function generate_display_name() {
 
   local -r lang_key="tile.${__MODID}.${registry_name}.name"
   local -r lang_value="$(strings::capitalize_snake "${color_name}") $(strings::capitalize "${__BASE_NAME}") $(strings::capitalize_snake "${flavor}")"
+
+  echo >>"${__LANG_FILE}" "${lang_key}=${lang_value}"
+}
+
+# Generates display-name entry into the language file
+# for the given color index and flavor
+# @globals
+# __BASE_NAME: The registry base name
+# __COLORS_NAME: The colors name array
+# __LANG_FILE: The language file path
+# __MODID: The mod id
+# @params
+# 1: flavor: The flavor of block/item
+# @product
+# adds a registry-key=display-name entry into the language file
+# @return
+# ?: >0: on failurefunction generate_models() {
+function generate_display_name_simple() {
+  # Both parameters are required
+  [[ ${#} -eq 1 ]] || return 1
+  local -r flavor="${1}"
+
+  local -r registry_name="${__BASE_NAME}_${flavor}"
+
+  local -r lang_key="tile.${__MODID}.${registry_name}.name"
+  local -r lang_value="$(strings::capitalize "${__BASE_NAME}") $(strings::capitalize_snake "${flavor}")"
 
   echo >>"${__LANG_FILE}" "${lang_key}=${lang_value}"
 }

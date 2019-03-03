@@ -35,6 +35,11 @@ public class ModItems {
 	public static ColorMap<Item> LAMP;
 	public static ColorMap<Item> INVERTED_LAMP;
 
+	public static Item ICE;
+	public static Item AQUIFER;
+	public static Item SUN;
+	public static Item FLAME;
+
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
 		ORE = ModBlocks.ORE.map(block -> register(event, block));
@@ -47,6 +52,11 @@ public class ModItems {
 		ENGINEERING_BRICKS = ModBlocks.ENGINEERING_BRICKS.map(block -> register(event, block));
 		LAMP = ModBlocks.LAMP.map(block -> register(event, block));
 		INVERTED_LAMP = ModBlocks.INVERTED_LAMP.map(block -> register(event, block));
+
+		ICE = register(event, ModBlocks.ICE);
+		AQUIFER = register(event, ModBlocks.AQUIFER);
+		SUN = register(event, ModBlocks.SUN);
+		FLAME = register(event, ModBlocks.FLAME);
 
 		CRYSTAL.forEachPenta((color, item) -> ModBlocks.ORE.get(color).setCrystal(item));
 	}
@@ -69,6 +79,11 @@ public class ModItems {
 		ENGINEERING_BRICKS.forEach((color, item) -> registerModel(item));
 		LAMP.forEach((color, item) -> registerModel(item));
 		INVERTED_LAMP.forEach((color, item) -> registerModel(item));
+
+		registerModel(ICE);
+		registerModel(AQUIFER);
+		registerModel(SUN);
+		registerModel(FLAME);
 	}
 
 	@SubscribeEvent
@@ -86,6 +101,11 @@ public class ModItems {
 		LAMP.forEach((color, item) -> patchModel(registry, item));
 		INVERTED_LAMP.forEach((color, item) -> patchModel(registry, item));
 
+		patchModel(registry, ICE);
+		patchModel(registry, AQUIFER);
+		patchModel(registry, SUN);
+		patchModel(registry, FLAME);
+
 		ModBlocks.ORE.forEach((color, block) -> patchModel(registry, block));
 		ModBlocks.CRYSTAL.forEach((color, block) -> patchModel(registry, block, "facing=up", "facing=down", "facing=east", "facing=west", "facing=south", "facing=north"));
 		ModBlocks.BRICKS.forEach((color, block) -> patchModel(registry, block));
@@ -96,6 +116,11 @@ public class ModItems {
 		ModBlocks.ENGINEERING_BRICKS.forEach((color, block) -> patchModel(registry, block));
 		ModBlocks.LAMP.forEach((color, block) -> patchModel(registry, block, "lit=true", "lit=false"));
 		ModBlocks.INVERTED_LAMP.forEach((color, block) -> patchModel(registry, block, "lit=true", "lit=false"));
+
+		patchModel(registry, ModBlocks.ICE);
+		patchModel(registry, ModBlocks.AQUIFER);
+		patchModel(registry, ModBlocks.SUN);
+		patchModel(registry, ModBlocks.FLAME);
 	}
 
 	private static Item register(RegistryEvent.Register<Item> event, Block base) {

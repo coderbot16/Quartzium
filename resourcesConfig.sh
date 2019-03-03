@@ -27,6 +27,23 @@ declare -r __OUT_RECIPES="${__RESOURCES}/recipes"
 declare -r __LANG_FILE="${__OUT_LANG}/en_us.lang"
 declare -r __BASE_NAME='quartzium'
 
+# Functional Block Constants
+declare -ra __FUNCTIONAL=(
+  'ice'
+  'aquifer'
+  'sun'
+  'flame'
+)
+
+declare -ri __FUNCTIONAL_COUNT="${#__FUNCTIONAL[@]}"
+
+declare -ra __FUNCTIONAL_COLOR_INDICES=(
+  '0' # white
+  '3' # light blue
+  '4' # yellow
+  '6' # pink
+)
+
 # Flavor constants
 declare -ra __FLAVORS=(
   'ore'
@@ -41,19 +58,6 @@ declare -ra __FLAVORS=(
   'crystal'
 )
 declare -ri __FLAVORS_COUNT="${#__FLAVORS[@]}"
-
-declare -ra __FLAVORS_GAMMA_TWEAK=(
-  '0.0'
-  '0.0'
-  '0.0'
-  '0.0'
-  '0.0'
-  '0.0'
-  '0.0'
-  '0.7'
-  '0.0'
-  '0.0'
-)
 
 declare -ra __FLAVORS_MODEL=(
   'cube'
