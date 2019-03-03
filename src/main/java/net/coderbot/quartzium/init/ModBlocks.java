@@ -31,7 +31,7 @@ public class ModBlocks {
 
 	public static BlockDecoration ICE;
 	public static BlockDecoration MAGMA;
-	public static BlockDecoration __MAGENTA;
+	public static BlockDecoration LEVITATOR;
 	public static BlockDecoration AQUIFER;
 	public static BlockDecoration __LIME;
 	public static BlockDecoration FLAME;
@@ -39,11 +39,11 @@ public class ModBlocks {
 	public static BlockDecoration LIQUID_VOID;
 	public static BlockDecoration FLUX_VOID;
 	public static BlockDecoration __CYAN;
-	public static BlockDecoration __PURPLE;
+	public static BlockDecoration ANCHOR;
+	public static BlockDecoration WATER;
 	public static BlockDecoration SOIL;
 	public static BlockDecoration SAND;
 	public static BlockDecoration __RED;
-	public static BlockDecoration WATER;
 	public static BlockDecoration ITEM_VOID;
 
 	@SubscribeEvent
@@ -96,6 +96,10 @@ public class ModBlocks {
 				new BlockDecoration(Color.ORANGE.getColor(), 2.0F, 10.0F, false)
 		);
 
+		LEVITATOR = registerBasicBlock(event, Quartzium.BASE_NAME + "_levitator",
+				new BlockDecoration(Color.MAGENTA.getColor(), 2.0F, 10.0F, false)
+		);
+
 		AQUIFER = registerBasicBlock(event, Quartzium.BASE_NAME + "_aquifer",
 				new BlockDecoration(Color.LIGHT_BLUE.getColor(), 2.0F, 10.0F, false)
 		);
@@ -114,6 +118,18 @@ public class ModBlocks {
 
 		FLUX_VOID = registerBasicBlock(event, Quartzium.BASE_NAME + "_flux_void",
 				new BlockDecoration(Color.LIGHT_GRAY.getColor(), 2.0F, 10.0F, false)
+		);
+
+		ANCHOR = registerBasicBlock(event, Quartzium.BASE_NAME + "_anchor",
+				new BlockDecoration(Color.PURPLE.getColor(), 2.0F, 10.0F, false)
+		);
+
+		SAND = registerBasicBlock(event, Quartzium.BASE_NAME + "_sand",
+				new BlockDecoration(Color.BROWN.getColor(), 2.0F, 10.0F, false)
+		);
+
+		SOIL = registerBasicBlock(event, Quartzium.BASE_NAME + "_soil",
+				new BlockDecoration(Color.GREEN.getColor(), 2.0F, 10.0F, false)
 		);
 
 		ITEM_VOID = registerBasicBlock(event, Quartzium.BASE_NAME + "_item_void",

@@ -31,11 +31,15 @@ declare -r __BASE_NAME='quartzium'
 declare -ra __FUNCTIONAL=(
   'ice'
   'magma'
+  'levitator'
   'aquifer'
   'sun'
   'flame'
   'liquid_void'
   'flux_void'
+  'anchor'
+  'sand'
+  'soil'
   'item_void'
 )
 
@@ -44,11 +48,15 @@ declare -ri __FUNCTIONAL_COUNT="${#__FUNCTIONAL[@]}"
 declare -ra __FUNCTIONAL_COLOR_INDICES=(
   '0' # white
   '1' # orange
+  '2' # magenta
   '3' # light blue
   '4' # yellow
   '6' # pink
   '7' # gray
   '8' # light gray
+  '10' # purple
+  '12' # brown
+  '13' # green
   '15' # black
 )
 
@@ -170,7 +178,7 @@ declare -ra __COLORS_RGB=(
   'rgb(50,100,100)'
   'rgb(100,0,100)'
   'rgb(0,0,100)'
-  'rgb(150,75,0)'
+  'rgb(120,75,0)'
   'rgb(0,100,0)'
   'rgb(100,0,0)'
   'rgb(0,0,0)'
@@ -189,7 +197,7 @@ declare -ra __COLORS_GAMMA=(
   '1.2'
   '0.7'
   '0.7'
-  '0.7'
+  '0.5'
   '0.7'
   '0.7'
   '0.2'

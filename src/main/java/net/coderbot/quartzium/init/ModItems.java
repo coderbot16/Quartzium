@@ -37,11 +37,15 @@ public class ModItems {
 
 	public static Item ICE;
 	public static Item MAGMA;
+	public static Item LEVITATOR;
 	public static Item AQUIFER;
 	public static Item SUN;
 	public static Item FLAME;
 	public static Item LIQUID_VOID;
 	public static Item FLUX_VOID;
+	public static Item ANCHOR;
+	public static Item SAND;
+	public static Item SOIL;
 	public static Item ITEM_VOID;
 
 	@SubscribeEvent
@@ -59,11 +63,15 @@ public class ModItems {
 
 		ICE = register(event, ModBlocks.ICE);
 		MAGMA = register(event, ModBlocks.MAGMA);
+		LEVITATOR = register(event, ModBlocks.LEVITATOR);
 		AQUIFER = register(event, ModBlocks.AQUIFER);
 		SUN = register(event, ModBlocks.SUN);
 		FLAME = register(event, ModBlocks.FLAME);
 		LIQUID_VOID = register(event, ModBlocks.LIQUID_VOID);
 		FLUX_VOID = register(event, ModBlocks.FLUX_VOID);
+		ANCHOR = register(event, ModBlocks.ANCHOR);
+		SAND = register(event, ModBlocks.SAND);
+		SOIL = register(event, ModBlocks.SOIL);
 		ITEM_VOID = register(event, ModBlocks.ITEM_VOID);
 
 		CRYSTAL.forEachPenta((color, item) -> ModBlocks.ORE.get(color).setCrystal(item));
@@ -90,11 +98,16 @@ public class ModItems {
 
 		registerModel(ICE);
 		registerModel(MAGMA);
+		registerModel(LEVITATOR);
 		registerModel(AQUIFER);
 		registerModel(SUN);
 		registerModel(FLAME);
 		registerModel(LIQUID_VOID);
 		registerModel(FLUX_VOID);
+		registerModel(SAND);
+		registerModel(SOIL);
+		registerModel(ANCHOR);
+
 		registerModel(ITEM_VOID);
 	}
 
@@ -115,11 +128,15 @@ public class ModItems {
 
 		patchModel(registry, ICE);
 		patchModel(registry, MAGMA);
+		patchModel(registry, LEVITATOR);
 		patchModel(registry, AQUIFER);
 		patchModel(registry, SUN);
 		patchModel(registry, FLAME);
 		patchModel(registry, LIQUID_VOID);
 		patchModel(registry, FLUX_VOID);
+		patchModel(registry, ANCHOR);
+		patchModel(registry, SAND);
+		patchModel(registry, SOIL);
 		patchModel(registry, ITEM_VOID);
 
 		ModBlocks.ORE.forEach((color, block) -> patchModel(registry, block));
@@ -135,11 +152,15 @@ public class ModItems {
 
 		patchModel(registry, ModBlocks.ICE);
 		patchModel(registry, ModBlocks.MAGMA);
+		patchModel(registry, ModBlocks.LEVITATOR);
 		patchModel(registry, ModBlocks.AQUIFER);
 		patchModel(registry, ModBlocks.SUN);
 		patchModel(registry, ModBlocks.FLAME);
 		patchModel(registry, ModBlocks.LIQUID_VOID);
 		patchModel(registry, ModBlocks.FLUX_VOID);
+		patchModel(registry, ModBlocks.ANCHOR);
+		patchModel(registry, ModBlocks.SAND);
+		patchModel(registry, ModBlocks.SOIL);
 		patchModel(registry, ModBlocks.ITEM_VOID);
 	}
 
