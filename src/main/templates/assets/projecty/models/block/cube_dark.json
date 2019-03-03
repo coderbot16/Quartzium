@@ -1,8 +1,8 @@
 {
   "parent": "block/block",
   "textures": {
-    "particle": "${TEXTURE_NOISE}",
-    "noise": "${TEXTURE_NOISE}",
+    "particle": "${TEXTURE_NOISE}_dark",
+    "noise": "${TEXTURE_NOISE}_dark",
     "overlay": "${TEXTURE_OVERLAY}"
   },
   "elements": [

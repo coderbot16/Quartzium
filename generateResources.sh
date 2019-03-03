@@ -15,6 +15,12 @@ function main() {
   # Initialize language file
   generate_language
 
+  # Generate colorized noise
+  generate_base_textures
+
+  # Copy overlay textures
+  copy_overlay_textures
+
   local -i color_index
   local -i flavor_index
   local flavor flavor_gamma_tweak flavor_model flavor_blockstate
@@ -29,7 +35,7 @@ function main() {
       flavor_gamma_tweak="${__FLAVORS_GAMMA_TWEAK[flavor_index]}"
 
       # Generate texture
-      generate_texture "${color_index}" "${flavor}" "${flavor_gamma_tweak}"
+      # generate_texture "${color_index}" "${flavor}" "${flavor_gamma_tweak}"
 
       # Generate models
       "generate_${flavor_model}_model" "${color_index}" "${flavor}"
@@ -77,6 +83,65 @@ function create_resources_directories() {
 function generate_language() {
   # NB: $(strings::capitalize "${__MODID}") doesn't handle camel case
   echo >"${__LANG_FILE}" "itemGroup.${__MODID}=ProjectY"
+}
+
+function copy_overlay_textures() {
+	for ((flavor_index = 0; flavor_index < __FLAVORS_COUNT; flavor_index += 1)); do
+		local flavor="${__FLAVORS[flavor_index]}"
+		local overlay_file="${__IN_TEXTURES}/overlay_${flavor}.png"
+		local texture_file="${__OUT_TEXTURES_BLOCK}/overlay_${flavor}.png"
+
+		cp ${overlay_file} ${texture_file}
+	done
+}
+
+function generate_base_textures() {
+	for ((color_index = 0; color_index < __COLORS_COUNT; color_index += 1)); do
+		generate_noise_texture "${color_index}" "" "0.0"
+		generate_noise_texture "${color_index}" "_dark" "0.7"
+	done
+}
+
+# Generates a colored noise texture from a white variant
+# @globals
+# __COLORS_GAMMA: The Gamma adjustement per color array
+# __COLORS_NAME: The colors name array
+# __COLORS_RGB: The RGB definition per color array
+# __IN_TEXTURES: The path of the noise and flavors overlay
+# __OUT_TEXTURES: the output path of textures
+# @params
+# 1: color_index: The color index
+# 2: variant: A name to use as the suffix for the texture name
+# 3: gamma_tweak: A value to subtract from the set gamma value (used for lamp textures)
+# @product
+# Creates a texture file in __OUT_TEXTURES
+# @return
+# ?: >0: on failure
+function generate_noise_texture() {
+  # Both parameters are required
+  [[ ${#} -eq 3 ]] || return 1
+  local -ri color_index="${1}"
+  local -r variant="${2}"
+  local -r gamma_tweak="${3:-0.0}"
+
+  local -r color_name="${__COLORS_NAME[${color_index}]}"
+  local -r rgb="${__COLORS_RGB[${color_index}]}"
+  local -r gamma_base="${__COLORS_GAMMA[${color_index}]}"
+  local -r noise_file="${__IN_TEXTURES}/noise.png"
+  local -r texture_file="${__OUT_TEXTURES_BLOCK}/noise_${color_name}${variant}.png"
+
+  local gamma
+  gamma="$(bc <<<"a=${gamma_base}; b=${gamma_tweak}; if(a > b) a-b else 0.2")"
+
+  # NB: Minecraft doesn't handle grayscale well, make sure the images are in RGB.
+  convert \
+    "${noise_file}" \
+    -fill "${rgb}" \
+    -tint 100 \
+    -gamma "${gamma}" \
+    -define png:color-type=2 \
+    -format png \
+    "${texture_file}"
 }
 
 # Generates a texture, by compositing a colored noise with a flavor overlay
@@ -258,6 +323,54 @@ function generate_lamp_blockstate() {
 # Creates an item json model file in __OUT_MODELS_ITEM
 # @return
 # ?: >0: on failure
+function generate_cube_dark_model() {
+  # Both parameters are required
+  [[ ${#} -eq 2 ]] || return 1
+  local -ri color_index="${1}"
+  local -r flavor="${2}"
+
+  local -r color_name="${__COLORS_NAME[${color_index}]}"
+  local -r registry_name="${color_name}_${__BASE_NAME}_${flavor}"
+
+  # Generate Block model
+  (
+    # shellcheck disable=SC2030,SC2031 # These variables are isolated
+    export \
+      TEXTURE_NOISE="${__MODID}:blocks/noise_${color_name}" \
+      TEXTURE_OVERLAY="${__MODID}:blocks/overlay_${flavor}"
+
+    envsubst \
+      <"${__IN_MODELS_BLOCK}/cube_dark.json" \
+      >"${__OUT_MODELS_BLOCK}/${registry_name}.json"
+  )
+
+  # Generate Item model
+  (
+    # shellcheck disable=SC2030,SC2031 # These variables are isolated
+    export \
+      PARENT="${__MODID}:block/${registry_name}"
+
+    envsubst \
+      <"${__IN_MODELS_ITEM}/cube_dark.json" \
+      >"${__OUT_MODELS_ITEM}/${registry_name}.json"
+  )
+}
+
+# Generates cube block and item model json files for a given color index and flavor
+# @globals
+# __BASE_NAME: The registry base name
+# __COLORS_NAME: The colors name array
+# __MODID: The mod id
+# __OUT_MODELS_BLOCK: The path of the block models
+# __OUT_MODELS_ITEM: The path of the item models
+# @params
+# 1: color_index: The color index
+# 2: flavor: The flavor of block/item
+# @product
+# Creates a block json model file in __OUT_MODELS_BLOCK
+# Creates an item json model file in __OUT_MODELS_ITEM
+# @return
+# ?: >0: on failure
 function generate_cube_model() {
   # Both parameters are required
   [[ ${#} -eq 2 ]] || return 1
@@ -271,7 +384,8 @@ function generate_cube_model() {
   (
     # shellcheck disable=SC2030,SC2031 # These variables are isolated
     export \
-      TEXTURE="${__MODID}:blocks/${flavor}_${color_name}"
+      TEXTURE_NOISE="${__MODID}:blocks/noise_${color_name}" \
+      TEXTURE_OVERLAY="${__MODID}:blocks/overlay_${flavor}"
 
     envsubst \
       <"${__IN_MODELS_BLOCK}/cube.json" \
@@ -316,7 +430,7 @@ function generate_icosahedron_model() {
   # Generate icosahedron Wavefront obj models
   (
     # shellcheck disable=SC2030,SC2031 # These variables are isolated
-    export TEXTURE="${__MODID}:blocks/crystal_${color_name}"
+    export TEXTURE="${__MODID}:blocks/noise_${color_name}"
 
     local -a models=("${__IN_MODELS_BLOCK}/icosahedron/"*.obj)
     local -i models_count="${#models[@]}"

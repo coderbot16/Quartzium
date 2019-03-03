@@ -63,7 +63,7 @@ declare -ra __FLAVORS_MODEL=(
   'cube'
   'cube'
   'cube'
-  'cube'
+  'cube_dark'
   'cube'
   'icosahedron'
 )

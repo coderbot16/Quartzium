@@ -18,9 +18,9 @@ public class Brightener {
 		for(int i = 0; i < quads.size(); i++) {
 			BakedQuad quad = quads.get(i);
 
-			//if(textures.contains(quad.getSprite().getIconName())) {
+			if(quad.getSprite().getIconName().contains("noise")) {
 				quads.set(i, brightenQuad(quad));
-			//}
+			}
 		}
 	}
 
