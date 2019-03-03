@@ -9,7 +9,7 @@ if [[ ${__resourcesConfig_sh:-0} -gt 0 ]]; then
 fi
 
 # [Initialization]
-declare -r __MODID='projecty'
+declare -r __MODID='quartzium'
 declare -r __TEMPLATES="./src/main/templates/assets/${__MODID}"
 declare -r __IN_BLOCKSTATES="${__TEMPLATES}/blockstates"
 declare -r __IN_LANG="${__TEMPLATES}/lang"
@@ -25,7 +25,7 @@ declare -r __OUT_MODELS_ITEM="${__RESOURCES}/models/item"
 declare -r __OUT_TEXTURES_BLOCK="${__RESOURCES}/textures/blocks"
 declare -r __OUT_RECIPES="${__RESOURCES}/recipes"
 declare -r __LANG_FILE="${__OUT_LANG}/en_us.lang"
-declare -r __BASE_NAME='xychronite'
+declare -r __BASE_NAME='quartzium'
 
 # Flavor constants
 declare -ra __FLAVORS=(

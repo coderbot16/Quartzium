@@ -1,6 +1,6 @@
-# ProjectY
+# Quartzium
 
-ProjectY is an attempt to reimagine the decoration blocks from 1.4.7 XyCraft. While the main focus is around decoration,
+Quartzium is an attempt to reimagine the decoration blocks from 1.4.7 XyCraft. While the main focus is around decoration,
 some of the functional blocks from XyCraft will be included as well, such as the Fabricator and Soil blocks.
 
 This mod is intended to be both performant, stable, and future-proof: it uses the 1.8+ model system idiomatically and

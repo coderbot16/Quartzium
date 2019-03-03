@@ -1,4 +1,4 @@
-package net.coderbot.projecty.client;
+package net.coderbot.quartzium.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;

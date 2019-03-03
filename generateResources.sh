@@ -82,7 +82,7 @@ function create_resources_directories() {
 # An initialized en_us language file
 function generate_language() {
   # NB: $(strings::capitalize "${__MODID}") doesn't handle camel case
-  echo >"${__LANG_FILE}" "itemGroup.${__MODID}=ProjectY"
+  echo >"${__LANG_FILE}" "itemGroup.${__MODID}=Quartzium"
 }
 
 function copy_overlay_textures() {

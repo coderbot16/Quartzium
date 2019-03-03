@@ -1,4 +1,4 @@
-package net.coderbot.projecty.client;
+package net.coderbot.quartzium.client;
 
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.state.IBlockState;

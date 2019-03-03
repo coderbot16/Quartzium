@@ -7,11 +7,11 @@
   ],
   "key": {
 	"C": {
-	  "item": "projecty:${COLOR}_${BASE}_crystal"
+	  "item": "quartzium:${COLOR}_${BASE}_crystal"
 	}
   },
   "result": {
 	"count": 1,
-	"item": "projecty:${COLOR}_${BASE}_block"
+	"item": "quartzium:${COLOR}_${BASE}_block"
   }
 }

@@ -1,25 +1,22 @@
-package net.coderbot.projecty.init;
+package net.coderbot.quartzium.init;
 
-import net.coderbot.projecty.ProjectY;
-import net.coderbot.projecty.blocks.BlockCrystal;
-import net.coderbot.projecty.blocks.BlockLamp;
-import net.coderbot.projecty.color.Color;
-import net.coderbot.projecty.color.ColorMap;
-import net.coderbot.projecty.blocks.BlockDecoration;
-import net.coderbot.projecty.blocks.BlockOre;
-import net.coderbot.projecty.color.PentaColor;
-import net.coderbot.projecty.color.PentaColorMap;
+import net.coderbot.quartzium.Quartzium;
+import net.coderbot.quartzium.blocks.BlockCrystal;
+import net.coderbot.quartzium.blocks.BlockLamp;
+import net.coderbot.quartzium.color.Color;
+import net.coderbot.quartzium.color.ColorMap;
+import net.coderbot.quartzium.blocks.BlockDecoration;
+import net.coderbot.quartzium.blocks.BlockOre;
+import net.coderbot.quartzium.color.PentaColor;
+import net.coderbot.quartzium.color.PentaColorMap;
 import net.minecraft.block.Block;
-import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.function.Function;
 
-@Mod.EventBusSubscriber(modid = ProjectY.MODID)
+@Mod.EventBusSubscriber(modid = Quartzium.MODID)
 public class ModBlocks {
 	public static PentaColorMap<BlockOre> ORE;
 	public static ColorMap<Block> CRYSTAL;
@@ -34,43 +31,43 @@ public class ModBlocks {
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
-		ORE = registerForPentaColors(event, ProjectY.BASE_NAME + "_ore", color ->
+		ORE = registerForPentaColors(event, Quartzium.BASE_NAME + "_ore", color ->
 				new BlockOre(color.getColor())
 		);
 
-		CRYSTAL = registerForColors(event, ProjectY.BASE_NAME + "_crystal", color ->
+		CRYSTAL = registerForColors(event, Quartzium.BASE_NAME + "_crystal", color ->
 				new BlockCrystal(color.getColor())
 		);
 
-		BRICKS = registerForColors(event, ProjectY.BASE_NAME + "_bricks", color ->
+		BRICKS = registerForColors(event, Quartzium.BASE_NAME + "_bricks", color ->
 				new BlockDecoration(color.getColor(), 2.0F, 10.0F, false)
 		);
 
-		BLOCK = registerForColors(event, ProjectY.BASE_NAME + "_block", color ->
+		BLOCK = registerForColors(event, Quartzium.BASE_NAME + "_block", color ->
 				new BlockDecoration(color.getColor(), 1.5F, 8.0F, true)
 		);
 
-		PLATE = registerForColors(event, ProjectY.BASE_NAME + "_plate", color ->
+		PLATE = registerForColors(event, Quartzium.BASE_NAME + "_plate", color ->
 				new BlockDecoration(color.getColor(), 8.0F, 32.0F, true)
 		);
 
-		PLATFORM = registerForColors(event, ProjectY.BASE_NAME + "_platform", color ->
+		PLATFORM = registerForColors(event, Quartzium.BASE_NAME + "_platform", color ->
 				new BlockDecoration(color.getColor(), 0.2F, 10.0F, false)
 		);
 
-		SHIELD = registerForColors(event, ProjectY.BASE_NAME + "_shield", color ->
+		SHIELD = registerForColors(event, Quartzium.BASE_NAME + "_shield", color ->
 				new BlockDecoration(color.getColor(), 16.0F, 112.0F, true)
 		);
 
-		ENGINEERING_BRICKS = registerForColors(event, ProjectY.BASE_NAME + "_engineering_bricks", color ->
+		ENGINEERING_BRICKS = registerForColors(event, Quartzium.BASE_NAME + "_engineering_bricks", color ->
 				new BlockDecoration(color.getColor(), 2.0F, 10.0F, false)
 		);
 
-		LAMP = registerForColors(event, ProjectY.BASE_NAME + "_lamp", color ->
+		LAMP = registerForColors(event, Quartzium.BASE_NAME + "_lamp", color ->
 				new BlockLamp(color.getColor(), 0.3F, 0.5F, false)
 		);
 
-		INVERTED_LAMP = registerForColors(event, ProjectY.BASE_NAME + "_inverted_lamp", color ->
+		INVERTED_LAMP = registerForColors(event, Quartzium.BASE_NAME + "_inverted_lamp", color ->
 				new BlockLamp(color.getColor(), 0.3F, 0.5F, true)
 		);
 	}
@@ -92,9 +89,9 @@ public class ModBlocks {
 	}
 
 	private static <T extends Block> T registerBasicBlock(RegistryEvent.Register<Block> event, String name, T block) {
-		block.setRegistryName(ProjectY.MODID, name);
-		block.setUnlocalizedName(ProjectY.MODID + "." + name);
-		block.setCreativeTab(ProjectY.TAB);
+		block.setRegistryName(Quartzium.MODID, name);
+		block.setUnlocalizedName(Quartzium.MODID + "." + name);
+		block.setCreativeTab(Quartzium.TAB);
 
 		event.getRegistry().register(block);
 

@@ -6,11 +6,11 @@
 	  "data": 0
 	},
 	{
-	  "item": "projecty:${COLOR}_${BASE}_block"
+	  "item": "quartzium:${COLOR}_${BASE}_block"
 	}
   ],
   "result": {
 	"count": 2,
-	"item": "projecty:${COLOR}_${BASE}_bricks"
+	"item": "quartzium:${COLOR}_${BASE}_bricks"
   }
 }

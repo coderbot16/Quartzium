@@ -1,9 +1,9 @@
-package net.coderbot.projecty.init;
+package net.coderbot.quartzium.init;
 
-import net.coderbot.projecty.ProjectY;
-import net.coderbot.projecty.client.SimpleBakedModelBright;
-import net.coderbot.projecty.color.ColorMap;
-import net.coderbot.projecty.color.PentaColorMap;
+import net.coderbot.quartzium.Quartzium;
+import net.coderbot.quartzium.client.SimpleBakedModelBright;
+import net.coderbot.quartzium.color.ColorMap;
+import net.coderbot.quartzium.color.PentaColorMap;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -22,7 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.HashSet;
 
-@Mod.EventBusSubscriber(modid = ProjectY.MODID)
+@Mod.EventBusSubscriber(modid = Quartzium.MODID)
 public class ModItems {
 	public static PentaColorMap<Item> ORE;
 	public static ColorMap<Item> CRYSTAL;
@@ -57,7 +57,7 @@ public class ModItems {
 			return;
 		}
 
-		OBJLoader.INSTANCE.addDomain(ProjectY.MODID);
+		OBJLoader.INSTANCE.addDomain(Quartzium.MODID);
 
 		ORE.forEach((color, item) -> registerModel(item));
 		CRYSTAL.forEach((color, item) -> registerModel(item));

@@ -1,7 +1,7 @@
 [
 {
-  "modid": "projecty",
-  "name": "ProjectY",
+  "modid": "quartzium",
+  "name": "Quartzium",
   "description": "Revival of the decoration blocks of XyCraft 1.4.7",
   "version": "${version}",
   "mcversion": "${mcversion}",

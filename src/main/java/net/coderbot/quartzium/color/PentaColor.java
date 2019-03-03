@@ -1,4 +1,4 @@
-package net.coderbot.projecty.color;
+package net.coderbot.quartzium.color;
 
 import net.minecraft.block.material.MapColor;
 
