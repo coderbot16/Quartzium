@@ -30,21 +30,21 @@ public class ModBlocks {
 	public static ColorMap<BlockLamp> INVERTED_LAMP;
 
 	public static BlockDecoration ICE;
-	public static BlockDecoration SAND;
+	public static BlockDecoration MAGMA;
 	public static BlockDecoration __MAGENTA;
 	public static BlockDecoration AQUIFER;
 	public static BlockDecoration __LIME;
 	public static BlockDecoration FLAME;
 	public static BlockDecoration SUN;
+	public static BlockDecoration LIQUID_VOID;
 	public static BlockDecoration FLUX_VOID;
-	public static BlockDecoration FLUID_VOID;
 	public static BlockDecoration __CYAN;
 	public static BlockDecoration __PURPLE;
 	public static BlockDecoration SOIL;
-	public static BlockDecoration __BROWN;
-	public static BlockDecoration MAGMA;
+	public static BlockDecoration SAND;
+	public static BlockDecoration __RED;
 	public static BlockDecoration WATER;
-	public static BlockDecoration VOID;
+	public static BlockDecoration ITEM_VOID;
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -92,16 +92,32 @@ public class ModBlocks {
 				new BlockDecoration(Color.WHITE.getColor(), 2.0F, 10.0F, false)
 		);
 
+		MAGMA = registerBasicBlock(event, Quartzium.BASE_NAME + "_magma",
+				new BlockDecoration(Color.ORANGE.getColor(), 2.0F, 10.0F, false)
+		);
+
 		AQUIFER = registerBasicBlock(event, Quartzium.BASE_NAME + "_aquifer",
 				new BlockDecoration(Color.LIGHT_BLUE.getColor(), 2.0F, 10.0F, false)
 		);
 
 		SUN = registerBasicBlock(event, Quartzium.BASE_NAME + "_sun",
-				new BlockDecoration(Color.LIGHT_BLUE.getColor(), 2.0F, 10.0F, false)
+				new BlockDecoration(Color.YELLOW.getColor(), 2.0F, 10.0F, false)
 		);
 
 		FLAME = registerBasicBlock(event, Quartzium.BASE_NAME + "_flame",
-				new BlockDecoration(Color.LIGHT_BLUE.getColor(), 2.0F, 10.0F, false)
+				new BlockDecoration(Color.PINK.getColor(), 2.0F, 10.0F, false)
+		);
+
+		LIQUID_VOID = registerBasicBlock(event, Quartzium.BASE_NAME + "_liquid_void",
+				new BlockDecoration(Color.GRAY.getColor(), 2.0F, 10.0F, false)
+		);
+
+		FLUX_VOID = registerBasicBlock(event, Quartzium.BASE_NAME + "_flux_void",
+				new BlockDecoration(Color.LIGHT_GRAY.getColor(), 2.0F, 10.0F, false)
+		);
+
+		ITEM_VOID = registerBasicBlock(event, Quartzium.BASE_NAME + "_item_void",
+				new BlockDecoration(Color.BLACK.getColor(), 2.0F, 10.0F, false)
 		);
 	}
 

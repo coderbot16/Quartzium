@@ -30,18 +30,26 @@ declare -r __BASE_NAME='quartzium'
 # Functional Block Constants
 declare -ra __FUNCTIONAL=(
   'ice'
+  'magma'
   'aquifer'
   'sun'
   'flame'
+  'liquid_void'
+  'flux_void'
+  'item_void'
 )
 
 declare -ri __FUNCTIONAL_COUNT="${#__FUNCTIONAL[@]}"
 
 declare -ra __FUNCTIONAL_COLOR_INDICES=(
   '0' # white
+  '1' # orange
   '3' # light blue
   '4' # yellow
   '6' # pink
+  '7' # gray
+  '8' # light gray
+  '15' # black
 )
 
 # Flavor constants
