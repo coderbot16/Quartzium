@@ -34,12 +34,16 @@ declare -ra __FUNCTIONAL=(
   'levitator'
   'aquifer'
   'sun'
+  'slime'
   'flame'
   'liquid_void'
   'flux_void'
+  'guardian'
   'anchor'
+  'floodgate'
   'sand'
   'soil'
+  'inferno'
   'item_void'
 )
 
@@ -51,12 +55,16 @@ declare -ra __FUNCTIONAL_COLOR_INDICES=(
   '2' # magenta
   '3' # light blue
   '4' # yellow
+  '5' # lime
   '6' # pink
   '7' # gray
   '8' # light gray
+  '9' # cyan
   '10' # purple
+  '11' # blue
   '12' # brown
   '13' # green
+  '14' # read
   '15' # black
 )
 

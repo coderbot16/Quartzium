@@ -40,12 +40,16 @@ public class ModItems {
 	public static Item LEVITATOR;
 	public static Item AQUIFER;
 	public static Item SUN;
+	public static Item SLIME;
 	public static Item FLAME;
 	public static Item LIQUID_VOID;
 	public static Item FLUX_VOID;
+	public static Item GUARDIAN;
 	public static Item ANCHOR;
+	public static Item FLOODGATE;
 	public static Item SAND;
 	public static Item SOIL;
+	public static Item INFERNO;
 	public static Item ITEM_VOID;
 
 	@SubscribeEvent
@@ -66,12 +70,16 @@ public class ModItems {
 		LEVITATOR = register(event, ModBlocks.LEVITATOR);
 		AQUIFER = register(event, ModBlocks.AQUIFER);
 		SUN = register(event, ModBlocks.SUN);
+		SLIME = register(event, ModBlocks.SLIME);
 		FLAME = register(event, ModBlocks.FLAME);
 		LIQUID_VOID = register(event, ModBlocks.LIQUID_VOID);
 		FLUX_VOID = register(event, ModBlocks.FLUX_VOID);
+		GUARDIAN = register(event, ModBlocks.GUARDIAN);
 		ANCHOR = register(event, ModBlocks.ANCHOR);
+		FLOODGATE = register(event, ModBlocks.FLOODGATE);
 		SAND = register(event, ModBlocks.SAND);
 		SOIL = register(event, ModBlocks.SOIL);
+		INFERNO = register(event, ModBlocks.INFERNO);
 		ITEM_VOID = register(event, ModBlocks.ITEM_VOID);
 
 		CRYSTAL.forEachPenta((color, item) -> ModBlocks.ORE.get(color).setCrystal(item));
@@ -101,13 +109,16 @@ public class ModItems {
 		registerModel(LEVITATOR);
 		registerModel(AQUIFER);
 		registerModel(SUN);
+		registerModel(SLIME);
 		registerModel(FLAME);
 		registerModel(LIQUID_VOID);
 		registerModel(FLUX_VOID);
+		registerModel(GUARDIAN);
 		registerModel(SAND);
 		registerModel(SOIL);
+		registerModel(FLOODGATE);
 		registerModel(ANCHOR);
-
+		registerModel(INFERNO);
 		registerModel(ITEM_VOID);
 	}
 
@@ -131,12 +142,16 @@ public class ModItems {
 		patchModel(registry, LEVITATOR);
 		patchModel(registry, AQUIFER);
 		patchModel(registry, SUN);
+		patchModel(registry, SLIME);
 		patchModel(registry, FLAME);
 		patchModel(registry, LIQUID_VOID);
 		patchModel(registry, FLUX_VOID);
-		patchModel(registry, ANCHOR);
+		patchModel(registry, GUARDIAN);
 		patchModel(registry, SAND);
 		patchModel(registry, SOIL);
+		patchModel(registry, FLOODGATE);
+		patchModel(registry, ANCHOR);
+		patchModel(registry, INFERNO);
 		patchModel(registry, ITEM_VOID);
 
 		ModBlocks.ORE.forEach((color, block) -> patchModel(registry, block));
@@ -155,12 +170,16 @@ public class ModItems {
 		patchModel(registry, ModBlocks.LEVITATOR);
 		patchModel(registry, ModBlocks.AQUIFER);
 		patchModel(registry, ModBlocks.SUN);
+		patchModel(registry, ModBlocks.SLIME);
 		patchModel(registry, ModBlocks.FLAME);
 		patchModel(registry, ModBlocks.LIQUID_VOID);
 		patchModel(registry, ModBlocks.FLUX_VOID);
-		patchModel(registry, ModBlocks.ANCHOR);
+		patchModel(registry, ModBlocks.GUARDIAN);
 		patchModel(registry, ModBlocks.SAND);
 		patchModel(registry, ModBlocks.SOIL);
+		patchModel(registry, ModBlocks.FLOODGATE);
+		patchModel(registry, ModBlocks.ANCHOR);
+		patchModel(registry, ModBlocks.INFERNO);
 		patchModel(registry, ModBlocks.ITEM_VOID);
 	}
 

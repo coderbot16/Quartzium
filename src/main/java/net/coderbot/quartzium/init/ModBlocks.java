@@ -33,17 +33,17 @@ public class ModBlocks {
 	public static BlockDecoration MAGMA;
 	public static BlockDecoration LEVITATOR;
 	public static BlockDecoration AQUIFER;
-	public static BlockDecoration __LIME;
-	public static BlockDecoration FLAME;
 	public static BlockDecoration SUN;
+	public static BlockDecoration SLIME;
+	public static BlockDecoration FLAME;
 	public static BlockDecoration LIQUID_VOID;
 	public static BlockDecoration FLUX_VOID;
-	public static BlockDecoration __CYAN;
+	public static BlockDecoration GUARDIAN;
 	public static BlockDecoration ANCHOR;
-	public static BlockDecoration WATER;
+	public static BlockDecoration FLOODGATE;
 	public static BlockDecoration SOIL;
 	public static BlockDecoration SAND;
-	public static BlockDecoration __RED;
+	public static BlockDecoration INFERNO;
 	public static BlockDecoration ITEM_VOID;
 
 	@SubscribeEvent
@@ -108,6 +108,10 @@ public class ModBlocks {
 				new BlockDecoration(Color.YELLOW.getColor(), 2.0F, 10.0F, false)
 		);
 
+		SLIME = registerBasicBlock(event, Quartzium.BASE_NAME + "_slime",
+				new BlockDecoration(Color.PINK.getColor(), 2.0F, 10.0F, false)
+		);
+
 		FLAME = registerBasicBlock(event, Quartzium.BASE_NAME + "_flame",
 				new BlockDecoration(Color.PINK.getColor(), 2.0F, 10.0F, false)
 		);
@@ -120,8 +124,16 @@ public class ModBlocks {
 				new BlockDecoration(Color.LIGHT_GRAY.getColor(), 2.0F, 10.0F, false)
 		);
 
+		GUARDIAN = registerBasicBlock(event, Quartzium.BASE_NAME + "_guardian",
+				new BlockDecoration(Color.PINK.getColor(), 2.0F, 10.0F, false)
+		);
+
 		ANCHOR = registerBasicBlock(event, Quartzium.BASE_NAME + "_anchor",
 				new BlockDecoration(Color.PURPLE.getColor(), 2.0F, 10.0F, false)
+		);
+
+		FLOODGATE = registerBasicBlock(event, Quartzium.BASE_NAME + "_floodgate",
+				new BlockDecoration(Color.PINK.getColor(), 2.0F, 10.0F, false)
 		);
 
 		SAND = registerBasicBlock(event, Quartzium.BASE_NAME + "_sand",
@@ -130,6 +142,10 @@ public class ModBlocks {
 
 		SOIL = registerBasicBlock(event, Quartzium.BASE_NAME + "_soil",
 				new BlockDecoration(Color.GREEN.getColor(), 2.0F, 10.0F, false)
+		);
+
+		INFERNO = registerBasicBlock(event, Quartzium.BASE_NAME + "_inferno",
+				new BlockDecoration(Color.PINK.getColor(), 2.0F, 10.0F, false)
 		);
 
 		ITEM_VOID = registerBasicBlock(event, Quartzium.BASE_NAME + "_item_void",
