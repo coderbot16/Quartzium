@@ -3,6 +3,10 @@ package net.coderbot.quartzium.init;
 import net.coderbot.quartzium.Quartzium;
 import net.coderbot.quartzium.blocks.BlockCrystal;
 import net.coderbot.quartzium.blocks.BlockLamp;
+import net.coderbot.quartzium.blocks.functional.BlockFlame;
+import net.coderbot.quartzium.blocks.functional.BlockIce;
+import net.coderbot.quartzium.blocks.functional.BlockInferno;
+import net.coderbot.quartzium.blocks.functional.BlockMagma;
 import net.coderbot.quartzium.color.Color;
 import net.coderbot.quartzium.color.ColorMap;
 import net.coderbot.quartzium.blocks.BlockDecoration;
@@ -29,7 +33,7 @@ public class ModBlocks {
 	public static ColorMap<BlockLamp> LAMP;
 	public static ColorMap<BlockLamp> INVERTED_LAMP;
 
-	public static BlockDecoration ICE;
+	public static BlockIce ICE;
 	public static BlockDecoration MAGMA;
 	public static BlockDecoration LEVITATOR;
 	public static BlockDecoration AQUIFER;
@@ -89,11 +93,11 @@ public class ModBlocks {
 		);
 
 		ICE = registerBasicBlock(event, Quartzium.BASE_NAME + "_ice",
-				new BlockDecoration(Color.WHITE.getColor(), 2.0F, 10.0F, false)
+				new BlockIce(2.0F, 10.0F)
 		);
 
 		MAGMA = registerBasicBlock(event, Quartzium.BASE_NAME + "_magma",
-				new BlockDecoration(Color.ORANGE.getColor(), 2.0F, 10.0F, false)
+				new BlockMagma(2.0F, 10.0F)
 		);
 
 		LEVITATOR = registerBasicBlock(event, Quartzium.BASE_NAME + "_levitator",
@@ -113,7 +117,7 @@ public class ModBlocks {
 		);
 
 		FLAME = registerBasicBlock(event, Quartzium.BASE_NAME + "_flame",
-				new BlockDecoration(Color.PINK.getColor(), 2.0F, 10.0F, false)
+				new BlockFlame(2.0F, 10.0F)
 		);
 
 		LIQUID_VOID = registerBasicBlock(event, Quartzium.BASE_NAME + "_liquid_void",
@@ -145,12 +149,14 @@ public class ModBlocks {
 		);
 
 		INFERNO = registerBasicBlock(event, Quartzium.BASE_NAME + "_inferno",
-				new BlockDecoration(Color.PINK.getColor(), 2.0F, 10.0F, false)
+				new BlockInferno(2.0F, 10.0F)
 		);
 
 		ITEM_VOID = registerBasicBlock(event, Quartzium.BASE_NAME + "_item_void",
 				new BlockDecoration(Color.BLACK.getColor(), 2.0F, 10.0F, false)
 		);
+
+		ICE.setInferno(INFERNO);
 	}
 
 	private static <T extends Block> ColorMap<T> registerForColors(RegistryEvent.Register<Block> event, String name, Function<Color, T> factory) {
