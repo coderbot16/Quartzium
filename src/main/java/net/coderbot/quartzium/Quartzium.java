@@ -2,6 +2,7 @@ package net.coderbot.quartzium;
 
 import net.coderbot.quartzium.color.Color;
 import net.coderbot.quartzium.init.ModItems;
+import net.coderbot.quartzium.world.QuartziumWorldGen;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
@@ -29,5 +30,7 @@ public class Quartzium
         ModItems.ORE.forEach((color, ore) ->
                 GameRegistry.addSmelting(ore, new ItemStack(ModItems.CRYSTAL.get(color), 3), 1)
         );
+
+        GameRegistry.registerWorldGenerator(new QuartziumWorldGen(), 0);
     }
 }
