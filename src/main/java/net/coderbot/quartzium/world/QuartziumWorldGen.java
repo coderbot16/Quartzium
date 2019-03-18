@@ -17,7 +17,7 @@ public class QuartziumWorldGen implements IWorldGenerator {
 	private static final WorldGenMinable BLUE = new WorldGenMinable(ModBlocks.ORE.get(PentaColor.BLUE).getDefaultState(), QuartziumConfig.ORES.blueSize);
 	private static final WorldGenMinable GREEN = new WorldGenMinable(ModBlocks.ORE.get(PentaColor.GREEN).getDefaultState(), QuartziumConfig.ORES.greenSize);
 	private static final WorldGenMinable RED = new WorldGenMinable(ModBlocks.ORE.get(PentaColor.RED).getDefaultState(), QuartziumConfig.ORES.redSize);
-	private static final WorldGenMinable BLACK = new WorldGenMinable(ModBlocks.ORE.get(PentaColor.RED).getDefaultState(), QuartziumConfig.ORES.blackSize);
+	private static final WorldGenMinable BLACK = new WorldGenMinable(ModBlocks.ORE.get(PentaColor.BLACK).getDefaultState(), QuartziumConfig.ORES.blackSize);
 
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		ore(random, chunkX, chunkZ, world, WHITE, QuartziumConfig.ORES.whiteCount);
