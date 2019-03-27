@@ -1,7 +1,7 @@
 package net.coderbot.quartzium;
 
 import net.coderbot.quartzium.color.Color;
-import net.coderbot.quartzium.init.ModItems;
+import net.coderbot.quartzium.init.QuartziumItems;
 import net.coderbot.quartzium.world.QuartziumWorldGen;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
@@ -21,14 +21,14 @@ public class Quartzium
     public static CreativeTabs TAB = new CreativeTabs("quartzium") {
         @Override
         public ItemStack getTabIconItem() {
-            return new ItemStack(ModItems.BRICKS.get(Color.BLUE));
+            return new ItemStack(QuartziumItems.BRICKS.get(Color.BLUE));
         }
     };
 
     @Mod.EventHandler
     public static void init(FMLInitializationEvent event) {
-        ModItems.ORE.forEach((color, ore) ->
-                GameRegistry.addSmelting(ore, new ItemStack(ModItems.CRYSTAL.get(color), 3), 1)
+        QuartziumItems.ORE.forEach((color, ore) ->
+                GameRegistry.addSmelting(ore, new ItemStack(QuartziumItems.CRYSTAL.get(color), 3), 1)
         );
 
         GameRegistry.registerWorldGenerator(new QuartziumWorldGen(), 0);

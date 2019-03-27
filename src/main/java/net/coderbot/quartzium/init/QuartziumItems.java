@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import java.util.HashSet;
 
 @Mod.EventBusSubscriber(modid = Quartzium.MODID)
-public class ModItems {
+public class QuartziumItems {
 	public static PentaColorMap<Item> ORE;
 	public static ColorMap<Item> CRYSTAL;
 	public static ColorMap<Item> BRICKS;
@@ -54,35 +54,35 @@ public class ModItems {
 
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
-		ORE = ModBlocks.ORE.map(block -> register(event, block));
-		CRYSTAL = ModBlocks.CRYSTAL.map(block -> register(event, block));
-		BRICKS = ModBlocks.BRICKS.map(block -> register(event, block));
-		BLOCK = ModBlocks.BLOCK.map(block -> register(event, block));
-		PLATE = ModBlocks.PLATE.map(block -> register(event, block));
-		PLATFORM = ModBlocks.PLATFORM.map(block -> register(event, block));
-		SHIELD = ModBlocks.SHIELD.map(block -> register(event, block));
-		ENGINEERING_BRICKS = ModBlocks.ENGINEERING_BRICKS.map(block -> register(event, block));
-		LAMP = ModBlocks.LAMP.map(block -> register(event, block));
-		INVERTED_LAMP = ModBlocks.INVERTED_LAMP.map(block -> register(event, block));
+		ORE = QuartziumBlocks.ORE.map(block -> register(event, block));
+		CRYSTAL = QuartziumBlocks.CRYSTAL.map(block -> register(event, block));
+		BRICKS = QuartziumBlocks.BRICKS.map(block -> register(event, block));
+		BLOCK = QuartziumBlocks.BLOCK.map(block -> register(event, block));
+		PLATE = QuartziumBlocks.PLATE.map(block -> register(event, block));
+		PLATFORM = QuartziumBlocks.PLATFORM.map(block -> register(event, block));
+		SHIELD = QuartziumBlocks.SHIELD.map(block -> register(event, block));
+		ENGINEERING_BRICKS = QuartziumBlocks.ENGINEERING_BRICKS.map(block -> register(event, block));
+		LAMP = QuartziumBlocks.LAMP.map(block -> register(event, block));
+		INVERTED_LAMP = QuartziumBlocks.INVERTED_LAMP.map(block -> register(event, block));
 
-		ICE = register(event, ModBlocks.ICE);
-		MAGMA = register(event, ModBlocks.MAGMA);
-		LEVITATOR = register(event, ModBlocks.LEVITATOR);
-		AQUIFER = register(event, ModBlocks.AQUIFER);
-		SUN = register(event, ModBlocks.SUN);
-		SLIME = register(event, ModBlocks.SLIME);
-		FLAME = register(event, ModBlocks.FLAME);
-		LIQUID_VOID = register(event, ModBlocks.LIQUID_VOID);
-		FLUX_VOID = register(event, ModBlocks.FLUX_VOID);
-		GUARDIAN = register(event, ModBlocks.GUARDIAN);
-		ANCHOR = register(event, ModBlocks.ANCHOR);
-		FLOODGATE = register(event, ModBlocks.FLOODGATE);
-		SAND = register(event, ModBlocks.SAND);
-		SOIL = register(event, ModBlocks.SOIL);
-		INFERNO = register(event, ModBlocks.INFERNO);
-		ITEM_VOID = register(event, ModBlocks.ITEM_VOID);
+		ICE = register(event, QuartziumBlocks.ICE);
+		MAGMA = register(event, QuartziumBlocks.MAGMA);
+		LEVITATOR = register(event, QuartziumBlocks.LEVITATOR);
+		AQUIFER = register(event, QuartziumBlocks.AQUIFER);
+		SUN = register(event, QuartziumBlocks.SUN);
+		SLIME = register(event, QuartziumBlocks.SLIME);
+		FLAME = register(event, QuartziumBlocks.FLAME);
+		LIQUID_VOID = register(event, QuartziumBlocks.LIQUID_VOID);
+		FLUX_VOID = register(event, QuartziumBlocks.FLUX_VOID);
+		GUARDIAN = register(event, QuartziumBlocks.GUARDIAN);
+		ANCHOR = register(event, QuartziumBlocks.ANCHOR);
+		FLOODGATE = register(event, QuartziumBlocks.FLOODGATE);
+		SAND = register(event, QuartziumBlocks.SAND);
+		SOIL = register(event, QuartziumBlocks.SOIL);
+		INFERNO = register(event, QuartziumBlocks.INFERNO);
+		ITEM_VOID = register(event, QuartziumBlocks.ITEM_VOID);
 
-		CRYSTAL.forEachPenta((color, item) -> ModBlocks.ORE.get(color).setCrystal(item));
+		CRYSTAL.forEachPenta((color, item) -> QuartziumBlocks.ORE.get(color).setCrystal(item));
 	}
 
 	@SubscribeEvent
@@ -154,33 +154,33 @@ public class ModItems {
 		patchModel(registry, INFERNO);
 		patchModel(registry, ITEM_VOID);
 
-		ModBlocks.ORE.forEach((color, block) -> patchModel(registry, block));
-		ModBlocks.CRYSTAL.forEach((color, block) -> patchModel(registry, block, "facing=up", "facing=down", "facing=east", "facing=west", "facing=south", "facing=north"));
-		ModBlocks.BRICKS.forEach((color, block) -> patchModel(registry, block));
-		ModBlocks.BLOCK.forEach((color, block) -> patchModel(registry, block));
-		ModBlocks.PLATE.forEach((color, block) -> patchModel(registry, block));
-		ModBlocks.PLATFORM.forEach((color, block) -> patchModel(registry, block));
-		ModBlocks.SHIELD.forEach((color, block) -> patchModel(registry, block));
-		ModBlocks.ENGINEERING_BRICKS.forEach((color, block) -> patchModel(registry, block));
-		ModBlocks.LAMP.forEach((color, block) -> patchModel(registry, block, "lit=true", "lit=false"));
-		ModBlocks.INVERTED_LAMP.forEach((color, block) -> patchModel(registry, block, "lit=true", "lit=false"));
+		QuartziumBlocks.ORE.forEach((color, block) -> patchModel(registry, block));
+		QuartziumBlocks.CRYSTAL.forEach((color, block) -> patchModel(registry, block, "facing=up", "facing=down", "facing=east", "facing=west", "facing=south", "facing=north"));
+		QuartziumBlocks.BRICKS.forEach((color, block) -> patchModel(registry, block));
+		QuartziumBlocks.BLOCK.forEach((color, block) -> patchModel(registry, block));
+		QuartziumBlocks.PLATE.forEach((color, block) -> patchModel(registry, block));
+		QuartziumBlocks.PLATFORM.forEach((color, block) -> patchModel(registry, block));
+		QuartziumBlocks.SHIELD.forEach((color, block) -> patchModel(registry, block));
+		QuartziumBlocks.ENGINEERING_BRICKS.forEach((color, block) -> patchModel(registry, block));
+		QuartziumBlocks.LAMP.forEach((color, block) -> patchModel(registry, block, "lit=true", "lit=false"));
+		QuartziumBlocks.INVERTED_LAMP.forEach((color, block) -> patchModel(registry, block, "lit=true", "lit=false"));
 
-		patchModel(registry, ModBlocks.ICE);
-		patchModel(registry, ModBlocks.MAGMA);
-		patchModel(registry, ModBlocks.LEVITATOR);
-		patchModel(registry, ModBlocks.AQUIFER);
-		patchModel(registry, ModBlocks.SUN);
-		patchModel(registry, ModBlocks.SLIME);
-		patchModel(registry, ModBlocks.FLAME);
-		patchModel(registry, ModBlocks.LIQUID_VOID);
-		patchModel(registry, ModBlocks.FLUX_VOID);
-		patchModel(registry, ModBlocks.GUARDIAN);
-		patchModel(registry, ModBlocks.SAND);
-		patchModel(registry, ModBlocks.SOIL);
-		patchModel(registry, ModBlocks.FLOODGATE);
-		patchModel(registry, ModBlocks.ANCHOR);
-		patchModel(registry, ModBlocks.INFERNO);
-		patchModel(registry, ModBlocks.ITEM_VOID);
+		patchModel(registry, QuartziumBlocks.ICE);
+		patchModel(registry, QuartziumBlocks.MAGMA);
+		patchModel(registry, QuartziumBlocks.LEVITATOR);
+		patchModel(registry, QuartziumBlocks.AQUIFER);
+		patchModel(registry, QuartziumBlocks.SUN);
+		patchModel(registry, QuartziumBlocks.SLIME);
+		patchModel(registry, QuartziumBlocks.FLAME);
+		patchModel(registry, QuartziumBlocks.LIQUID_VOID);
+		patchModel(registry, QuartziumBlocks.FLUX_VOID);
+		patchModel(registry, QuartziumBlocks.GUARDIAN);
+		patchModel(registry, QuartziumBlocks.SAND);
+		patchModel(registry, QuartziumBlocks.SOIL);
+		patchModel(registry, QuartziumBlocks.FLOODGATE);
+		patchModel(registry, QuartziumBlocks.ANCHOR);
+		patchModel(registry, QuartziumBlocks.INFERNO);
+		patchModel(registry, QuartziumBlocks.ITEM_VOID);
 	}
 
 	private static Item register(RegistryEvent.Register<Item> event, Block base) {

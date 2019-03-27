@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.function.Function;
 
 @Mod.EventBusSubscriber(modid = Quartzium.MODID)
-public class ModBlocks {
+public class QuartziumBlocks {
 	public static PentaColorMap<BlockOre> ORE;
 	public static ColorMap<Block> CRYSTAL;
 	public static ColorMap<Block> BRICKS;
